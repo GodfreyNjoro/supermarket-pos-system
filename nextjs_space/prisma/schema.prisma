@@ -19,15 +19,35 @@ enum PaymentMethod {
   CARD
 }
 
+model Store {
+  id        String    @id @default(cuid())
+  name      String
+  address   String?
+  phone     String?
+  email     String?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]
+  products  Product[]
+  sales     Sale[]
+  
+  @@index([name])
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
   password  String
   role      Role     @default(CASHIER)
+  storeId   String?  // Optional: null means access to all stores (ADMIN)
+  store     Store?   @relation(fields: [storeId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   sales     Sale[]
+  
+  @@index([storeId])
 }
 
 model Category {
@@ -40,7 +60,7 @@ model Category {
 
 model Product {
   id                String      @id @default(cuid())
-  barcode           String      @unique
+  barcode           String
   name              String
   description       String?
   price             Float
@@ -48,6 +68,8 @@ model Product {
   reorderLevel      Int         @default(10)
   categoryId        String
   category          Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  storeId           String
+  store             Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
   imageUrl          String?
   cloud_storage_path String?
   isPublic          Boolean     @default(true)
@@ -56,8 +78,10 @@ model Product {
   saleItems         SaleItem[]
   returnItems       ReturnItem[]
   
+  @@unique([barcode, storeId]) // Same barcode can exist in different stores
   @@index([categoryId])
   @@index([barcode])
+  @@index([storeId])
 }
 
 model Customer {
@@ -78,6 +102,8 @@ model Sale {
   receiptNumber   String        @unique
   userId          String
   user            User          @relation(fields: [userId], references: [id])
+  storeId         String
+  store           Store         @relation(fields: [storeId], references: [id], onDelete: Cascade)
   customerId      String?
   customer        Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
   subtotal        Float
@@ -94,6 +120,7 @@ model Sale {
   returns         Return[]
   
   @@index([userId])
+  @@index([storeId])
   @@index([customerId])
   @@index([receiptNumber])
   @@index([createdAt])

@@ -28,6 +28,7 @@ import { useOnlineStatus } from '@/hooks/use-online-status';
 import { offlineDB, OfflineTransaction } from '@/lib/indexeddb';
 import { toast } from '@/hooks/use-toast';
 import { useKeyboardShortcuts, formatShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { useStore } from '@/lib/contexts/store-context';
 
 interface CartItem {
   product: any;
@@ -39,6 +40,7 @@ interface CartItem {
 export default function POSPage() {
   const { data: session } = useSession() || {};
   const { isOnline } = useOnlineStatus();
+  const { selectedStore } = useStore();
   const [barcode, setBarcode] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -77,10 +79,12 @@ export default function POSPage() {
   }, []);
 
   useEffect(() => {
-    fetchProducts();
-    fetchCustomers();
-    fetchCategories();
-  }, [isOnline]);
+    if (selectedStore) {
+      fetchProducts();
+      fetchCustomers();
+      fetchCategories();
+    }
+  }, [isOnline, selectedStore]);
 
   // Enhanced search with filters and sorting
   useEffect(() => {
@@ -117,18 +121,23 @@ export default function POSPage() {
 
   const fetchProducts = async (search = '') => {
     try {
+      if (!selectedStore) {
+        return;
+      }
+
       if (isOnline) {
-        // Online: fetch from API
-        const url = '/api/products';
+        // Online: fetch from API with storeId filter
+        const url = `/api/products?storeId=${selectedStore.id}`;
         const res = await fetch(url);
         const data = await res.json();
         setAllProducts(data);
         setProducts(data);
       } else {
-        // Offline: fetch from IndexedDB
+        // Offline: fetch from IndexedDB and filter by storeId
         const cachedProducts = await offlineDB.getCachedProducts();
-        setAllProducts(cachedProducts);
-        setProducts(cachedProducts);
+        const storeProducts = cachedProducts.filter(p => p.storeId === selectedStore.id);
+        setAllProducts(storeProducts);
+        setProducts(storeProducts);
       }
     } catch (error) {
       toast({

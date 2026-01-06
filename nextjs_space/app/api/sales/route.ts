@@ -11,9 +11,15 @@ export async function GET(request: Request) {
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
     const customerId = searchParams.get('customerId');
+    const storeId = searchParams.get('storeId');
     const limit = searchParams.get('limit');
 
     const where: any = {};
+
+    // Filter by storeId if provided
+    if (storeId) {
+      where.storeId = storeId;
+    }
 
     if (startDate && endDate) {
       where.createdAt = {
@@ -37,6 +43,7 @@ export async function GET(request: Request) {
           },
         },
         customer: true,
+        store: true,
         items: {
           include: {
             product: true,
@@ -69,6 +76,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       customerId,
+      storeId,
       items,
       subtotal,
       discountType,
@@ -87,6 +95,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!storeId) {
+      return NextResponse.json(
+        { error: 'Store ID is required' },
+        { status: 400 }
+      );
+    }
+
     // Generate receipt number
     const receiptNumber = `REC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
@@ -97,6 +112,7 @@ export async function POST(request: Request) {
         data: {
           receiptNumber,
           userId: (session.user as any).id,
+          storeId,
           customerId: customerId || null,
           subtotal: parseFloat(subtotal),
           discountType: discountType || null,
@@ -148,6 +164,7 @@ export async function POST(request: Request) {
           },
         },
         customer: true,
+        store: true,
         items: {
           include: {
             product: true,

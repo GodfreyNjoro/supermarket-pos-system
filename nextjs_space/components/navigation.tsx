@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
+import { StoreSelector } from '@/components/store-selector';
 
 export function Navigation() {
   const { data: session } = useSession() || {};
@@ -77,6 +78,7 @@ export function Navigation() {
 
             <div className="flex items-center space-x-4">
               <OfflineIndicator />
+              <StoreSelector />
               <div className="hidden text-sm text-gray-600 md:block">
                 <span className="font-medium">{session?.user?.name}</span>
                 <span className="ml-2 rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-700">

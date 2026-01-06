@@ -11,8 +11,14 @@ export async function GET(request: Request) {
     const search = searchParams.get('search');
     const categoryId = searchParams.get('categoryId');
     const lowStock = searchParams.get('lowStock');
+    const storeId = searchParams.get('storeId');
 
     const where: any = {};
+
+    // Filter by storeId if provided
+    if (storeId) {
+      where.storeId = storeId;
+    }
 
     if (search) {
       where.OR = [
@@ -35,6 +41,7 @@ export async function GET(request: Request) {
       where,
       include: {
         category: true,
+        store: true,
       },
       orderBy: {
         name: 'asc',
@@ -67,26 +74,30 @@ export async function POST(request: Request) {
       stock,
       reorderLevel,
       categoryId,
+      storeId,
       imageUrl,
       cloud_storage_path,
       isPublic,
     } = body;
 
-    if (!barcode || !name || !price || !categoryId) {
+    if (!barcode || !name || !price || !categoryId || !storeId) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Check if barcode already exists
-    const existingProduct = await prisma.product.findUnique({
-      where: { barcode },
+    // Check if barcode already exists in this store
+    const existingProduct = await prisma.product.findFirst({
+      where: {
+        barcode,
+        storeId,
+      },
     });
 
     if (existingProduct) {
       return NextResponse.json(
-        { error: 'Product with this barcode already exists' },
+        { error: 'Product with this barcode already exists in this store' },
         { status: 400 }
       );
     }
@@ -100,12 +111,14 @@ export async function POST(request: Request) {
         stock: parseInt(stock) || 0,
         reorderLevel: parseInt(reorderLevel) || 10,
         categoryId,
+        storeId,
         imageUrl: imageUrl || null,
         cloud_storage_path: cloud_storage_path || null,
         isPublic: isPublic ?? true,
       },
       include: {
         category: true,
+        store: true,
       },
     });
 
