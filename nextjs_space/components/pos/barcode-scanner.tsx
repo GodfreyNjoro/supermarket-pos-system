@@ -29,6 +29,24 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
         throw new Error('Camera API not supported in this browser');
       }
 
+      // Show the scanner UI first so video element is rendered
+      setIsScanning(true);
+      
+      // Wait for React to render the video element
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Double check video element is now available
+      if (!videoRef.current) {
+        // Wait a bit longer
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        if (!videoRef.current) {
+          throw new Error('Video element failed to render');
+        }
+      }
+
+      console.log('Video element ready, requesting camera...');
+
       // Request camera access with timeout
       const stream = await Promise.race([
         navigator.mediaDevices.getUserMedia({ 
@@ -44,10 +62,6 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
       ]);
 
       console.log('Camera stream obtained:', stream);
-
-      if (!videoRef.current) {
-        throw new Error('Video element not available');
-      }
 
       // Set video stream
       videoRef.current.srcObject = stream;
@@ -80,7 +94,6 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
       codeReaderRef.current = new BrowserMultiFormatReader();
       
       // Update state
-      setIsScanning(true);
       setIsProcessing(false);
 
       // Start continuous scanning
