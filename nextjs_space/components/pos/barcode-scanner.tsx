@@ -22,40 +22,96 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
     try {
       setError('');
       setIsProcessing(true);
+      console.log('Starting camera...');
 
-      // Request camera access
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        } 
-      });
-
-      if (videoRef.current && stream) {
-        videoRef.current.srcObject = stream;
-        streamRef.current = stream;
-        setIsScanning(true);
-        setIsProcessing(false);
-
-        // Initialize barcode reader
-        codeReaderRef.current = new BrowserMultiFormatReader();
-        
-        // Wait for video to be ready
-        await new Promise<void>((resolve) => {
-          if (videoRef.current) {
-            videoRef.current.onloadedmetadata = () => resolve();
-          }
-        });
-
-        // Start continuous scanning
-        scanningRef.current = true;
-        continuousScan();
+      // Check if mediaDevices is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera API not supported in this browser');
       }
-    } catch (err) {
-      console.error('Camera error:', err);
-      setError('Camera access denied or not available');
+
+      // Request camera access with timeout
+      const stream = await Promise.race([
+        navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'environment',
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          } 
+        }),
+        new Promise<MediaStream>((_, reject) => 
+          setTimeout(() => reject(new Error('Camera access timeout')), 10000)
+        )
+      ]);
+
+      console.log('Camera stream obtained:', stream);
+
+      if (!videoRef.current) {
+        throw new Error('Video element not available');
+      }
+
+      // Set video stream
+      videoRef.current.srcObject = stream;
+      streamRef.current = stream;
+
+      // Wait for video to be ready with timeout
+      await Promise.race([
+        new Promise<void>((resolve) => {
+          if (videoRef.current) {
+            if (videoRef.current.readyState >= 2) {
+              // Video is already ready
+              console.log('Video already ready');
+              resolve();
+            } else {
+              videoRef.current.onloadedmetadata = () => {
+                console.log('Video metadata loaded');
+                resolve();
+              };
+            }
+          }
+        }),
+        new Promise<void>((_, reject) => 
+          setTimeout(() => reject(new Error('Video loading timeout')), 5000)
+        )
+      ]);
+
+      console.log('Video ready, starting scanner...');
+
+      // Initialize barcode reader
+      codeReaderRef.current = new BrowserMultiFormatReader();
+      
+      // Update state
+      setIsScanning(true);
       setIsProcessing(false);
+
+      // Start continuous scanning
+      scanningRef.current = true;
+      continuousScan();
+
+      console.log('Scanner started successfully');
+    } catch (err: any) {
+      console.error('Camera error:', err);
+      
+      // Cleanup on error
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+      
+      // Set user-friendly error message
+      let errorMessage = 'Camera access denied or not available';
+      if (err.name === 'NotAllowedError') {
+        errorMessage = 'Camera permission denied. Please allow camera access in your browser settings.';
+      } else if (err.name === 'NotFoundError') {
+        errorMessage = 'No camera found on this device.';
+      } else if (err.name === 'NotReadableError') {
+        errorMessage = 'Camera is already in use by another application.';
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
+      setIsProcessing(false);
+      setIsScanning(false);
     }
   };
 
