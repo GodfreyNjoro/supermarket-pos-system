@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Camera, X, CheckCircle2, Loader2 } from 'lucide-react';
-import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
+import { BrowserMultiFormatReader, NotFoundException, BarcodeFormat, DecodeHintType } from '@zxing/library';
 
 interface BarcodeScannerProps {
   onScan: (barcode: string) => void;
@@ -90,8 +90,29 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
 
       console.log('Video ready, starting scanner...');
 
-      // Initialize barcode reader
-      codeReaderRef.current = new BrowserMultiFormatReader();
+      // Initialize barcode reader with support for all formats
+      const hints = new Map();
+      const formats = [
+        BarcodeFormat.EAN_13,
+        BarcodeFormat.EAN_8,
+        BarcodeFormat.UPC_A,
+        BarcodeFormat.UPC_E,
+        BarcodeFormat.UPC_EAN_EXTENSION,
+        BarcodeFormat.CODE_128,
+        BarcodeFormat.CODE_39,
+        BarcodeFormat.CODE_93,
+        BarcodeFormat.CODABAR,
+        BarcodeFormat.ITF,
+        BarcodeFormat.QR_CODE,
+        BarcodeFormat.DATA_MATRIX,
+        BarcodeFormat.AZTEC,
+        BarcodeFormat.PDF_417,
+      ];
+      hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+      hints.set(DecodeHintType.TRY_HARDER, true);
+      
+      codeReaderRef.current = new BrowserMultiFormatReader(hints);
+      console.log('✅ Scanner configured with support for:', formats.length, 'barcode formats');
       
       // Update state
       setIsProcessing(false);
