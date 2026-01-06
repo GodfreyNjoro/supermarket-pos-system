@@ -63,8 +63,11 @@ export default function POSPage() {
       if (isOnline) {
         // Online: fetch from API
         const url = search ? `/api/products?search=${search}` : '/api/products';
+        console.log('🌐 Fetching products from API:', url);
         const res = await fetch(url);
         const data = await res.json();
+        console.log('✅ Products fetched from API:', data.length, 'products');
+        console.log('📋 Product barcodes:', data.map((p: any) => `${p.barcode} - ${p.name}`));
         setProducts(data);
       } else {
         // Offline: fetch from IndexedDB
@@ -74,13 +77,15 @@ export default function POSPage() {
             p.name?.toLowerCase()?.includes(search.toLowerCase()) ||
             p.barcode?.includes(search)
           );
+          console.log('💾 Loaded filtered products from cache:', filtered.length, 'products');
           setProducts(filtered);
         } else {
+          console.log('💾 Loaded products from cache:', cachedProducts.length, 'products');
           setProducts(cachedProducts);
         }
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('❌ Error fetching products:', error);
       toast({
         title: 'Error',
         description: 'Failed to load products',
@@ -110,12 +115,23 @@ export default function POSPage() {
     e.preventDefault();
     if (!barcode?.trim?.()) return;
 
-    const product = products?.find?.(p => p?.barcode === barcode?.trim?.());
+    const searchBarcode = barcode?.trim?.();
+    console.log('🔍 Searching for barcode:', searchBarcode);
+    console.log('📦 Total products available:', products?.length);
+    console.log('📋 All barcodes in products:', products?.map(p => p?.barcode));
+    
+    const product = products?.find?.(p => {
+      console.log(`Comparing "${p?.barcode}" === "${searchBarcode}":`, p?.barcode === searchBarcode);
+      return p?.barcode === searchBarcode;
+    });
+    
     if (product) {
+      console.log('✅ Product found:', product.name);
       addToCart(product);
       setBarcode('');
       barcodeInputRef?.current?.focus?.();
     } else {
+      console.log('❌ Product not found for barcode:', searchBarcode);
       alert('Product not found');
     }
   };
@@ -323,12 +339,25 @@ export default function POSPage() {
                     Add
                   </button>
                   <BarcodeScanner onScan={(code) => {
+                    console.log('📷 Camera scanned barcode:', code);
+                    console.log('📦 Products available at scan time:', products?.length);
+                    console.log('📋 Barcodes at scan time:', products?.map(p => p?.barcode));
+                    
                     setBarcode(code);
                     setTimeout(() => {
-                      const product = products?.find?.(p => p?.barcode === code);
+                      console.log('🔍 Looking for product with barcode:', code);
+                      const product = products?.find?.(p => {
+                        const match = p?.barcode === code;
+                        console.log(`  Checking "${p?.barcode}" === "${code}":`, match, p?.name);
+                        return match;
+                      });
                       if (product) {
+                        console.log('✅ Found product from camera:', product.name);
                         addToCart(product);
                         setBarcode('');
+                      } else {
+                        console.log('❌ No product found for camera-scanned barcode:', code);
+                        alert('Product not found');
                       }
                     }, 100);
                   }} />
