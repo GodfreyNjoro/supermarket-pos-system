@@ -13,10 +13,14 @@ import {
   User,
   ShoppingCart,
   Printer,
+  WifiOff,
 } from 'lucide-react';
 import { BarcodeScanner } from '@/components/pos/barcode-scanner';
 import { PaymentModal } from '@/components/pos/payment-modal';
 import { useSession } from 'next-auth/react';
+import { useOnlineStatus } from '@/hooks/use-online-status';
+import { offlineDB, OfflineTransaction } from '@/lib/indexeddb';
+import { toast } from '@/hooks/use-toast';
 
 interface CartItem {
   product: any;
@@ -27,6 +31,7 @@ interface CartItem {
 
 export default function POSPage() {
   const { data: session } = useSession() || {};
+  const { isOnline } = useOnlineStatus();
   const [barcode, setBarcode] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -43,7 +48,7 @@ export default function POSPage() {
   useEffect(() => {
     fetchProducts();
     fetchCustomers();
-  }, []);
+  }, [isOnline]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -55,20 +60,47 @@ export default function POSPage() {
 
   const fetchProducts = async (search = '') => {
     try {
-      const url = search ? `/api/products?search=${search}` : '/api/products';
-      const res = await fetch(url);
-      const data = await res.json();
-      setProducts(data);
+      if (isOnline) {
+        // Online: fetch from API
+        const url = search ? `/api/products?search=${search}` : '/api/products';
+        const res = await fetch(url);
+        const data = await res.json();
+        setProducts(data);
+      } else {
+        // Offline: fetch from IndexedDB
+        const cachedProducts = await offlineDB.getCachedProducts();
+        if (search) {
+          const filtered = cachedProducts.filter(p => 
+            p.name?.toLowerCase()?.includes(search.toLowerCase()) ||
+            p.barcode?.includes(search)
+          );
+          setProducts(filtered);
+        } else {
+          setProducts(cachedProducts);
+        }
+      }
     } catch (error) {
       console.error('Error fetching products:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load products',
+        variant: 'destructive',
+      });
     }
   };
 
   const fetchCustomers = async () => {
     try {
-      const res = await fetch('/api/customers');
-      const data = await res.json();
-      setCustomers(data);
+      if (isOnline) {
+        // Online: fetch from API
+        const res = await fetch('/api/customers');
+        const data = await res.json();
+        setCustomers(data);
+      } else {
+        // Offline: fetch from IndexedDB
+        const cachedCustomers = await offlineDB.getCachedCustomers();
+        setCustomers(cachedCustomers);
+      }
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
@@ -173,27 +205,71 @@ export default function POSPage() {
         changeGiven,
       };
 
-      const res = await fetch('/api/sales', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(saleData),
-      });
+      if (isOnline) {
+        // Online: process sale immediately
+        const res = await fetch('/api/sales', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(saleData),
+        });
 
-      if (res.ok) {
-        const sale = await res.json();
-        setLastSale(sale);
+        if (res.ok) {
+          const sale = await res.json();
+          setLastSale(sale);
+          setShowPaymentModal(false);
+          setShowReceipt(true);
+          toast({
+            title: 'Sale Complete',
+            description: 'Transaction processed successfully',
+          });
+          // Clear cart
+          setCart([]);
+          setSelectedCustomer(null);
+          setDiscountValue(0);
+        } else {
+          alert('Failed to process sale');
+        }
+      } else {
+        // Offline: queue transaction for later sync
+        const offlineTransaction: OfflineTransaction = {
+          id: `offline-sale-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          timestamp: Date.now(),
+          type: 'sale',
+          data: saleData,
+          synced: false,
+        };
+
+        await offlineDB.addTransaction(offlineTransaction);
+
+        // Create a mock sale object for receipt
+        const mockSale = {
+          id: offlineTransaction.id,
+          ...saleData,
+          createdAt: new Date().toISOString(),
+          user: session?.user,
+        };
+
+        setLastSale(mockSale);
         setShowPaymentModal(false);
         setShowReceipt(true);
+        
+        toast({
+          title: 'Sale Queued (Offline)',
+          description: 'Transaction saved locally and will sync when online',
+        });
+
         // Clear cart
         setCart([]);
         setSelectedCustomer(null);
         setDiscountValue(0);
-      } else {
-        alert('Failed to process sale');
       }
     } catch (error) {
       console.error('Error processing sale:', error);
-      alert('Error processing sale');
+      toast({
+        title: 'Error',
+        description: 'Failed to process sale',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -210,6 +286,20 @@ export default function POSPage() {
             <h1 className="text-3xl font-bold text-gray-900">Point of Sale</h1>
             <p className="mt-2 text-gray-600">Scan products and process transactions</p>
           </div>
+
+          {!isOnline && (
+            <div className="mb-6 rounded-lg bg-amber-50 border border-amber-200 p-4">
+              <div className="flex items-center">
+                <WifiOff className="h-5 w-5 text-amber-600 mr-3" />
+                <div>
+                  <h3 className="text-sm font-semibold text-amber-800">Offline Mode</h3>
+                  <p className="text-sm text-amber-700 mt-1">
+                    You're working offline. Sales will be processed using cached data and synced when you're back online.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Left Panel - Products & Barcode Scanner */}

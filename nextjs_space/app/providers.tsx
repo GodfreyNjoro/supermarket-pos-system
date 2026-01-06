@@ -2,6 +2,9 @@
 
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from '@/components/theme-provider';
+import { PWARegistration } from '@/components/pwa-registration';
+import { InstallPrompt } from '@/components/install-prompt';
+import { Toaster } from '@/components/ui/toaster';
 import { ReactNode, useEffect, useState } from 'react';
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -23,6 +26,9 @@ export function Providers({ children }: { children: ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
+        <PWARegistration />
+        <InstallPrompt />
+        <Toaster />
         {children}
       </ThemeProvider>
     </SessionProvider>

@@ -15,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import { useState } from 'react';
+import { OfflineIndicator } from '@/components/offline-indicator';
 
 export function Navigation() {
   const { data: session } = useSession() || {};
@@ -75,6 +76,7 @@ export function Navigation() {
             </div>
 
             <div className="flex items-center space-x-4">
+              <OfflineIndicator />
               <div className="hidden text-sm text-gray-600 md:block">
                 <span className="font-medium">{session?.user?.name}</span>
                 <span className="ml-2 rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-700">
@@ -107,6 +109,9 @@ export function Navigation() {
           <div className="md:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               <div className="mb-2 border-b border-gray-200 pb-2">
+                <div className="px-3 mb-2">
+                  <OfflineIndicator />
+                </div>
                 <p className="px-3 text-sm font-medium text-gray-900">
                   {session?.user?.name}
                 </p>
