@@ -9,8 +9,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
+import { useStore } from '@/lib/contexts/store-context';
 
 export default function ProductsPage() {
+  const { selectedStore } = useStore();
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,18 +21,26 @@ export default function ProductsPage() {
   const [showLowStock, setShowLowStock] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-  }, []);
+    if (selectedStore) {
+      fetchProducts();
+      fetchCategories();
+    }
+  }, [selectedStore]);
 
   useEffect(() => {
-    fetchProducts();
+    if (selectedStore) {
+      fetchProducts();
+    }
   }, [selectedCategory, showLowStock]);
 
   const fetchProducts = async () => {
     try {
+      if (!selectedStore) {
+        return;
+      }
+
       setLoading(true);
-      let url = '/api/products?';
+      let url = `/api/products?storeId=${selectedStore.id}&`;
       if (searchTerm) url += `search=${searchTerm}&`;
       if (selectedCategory) url += `categoryId=${selectedCategory}&`;
       if (showLowStock) url += 'lowStock=true&';

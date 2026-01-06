@@ -65,15 +65,19 @@ export async function PUT(
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    // If barcode is being changed, check if new barcode already exists
+    // If barcode is being changed, check if new barcode already exists in the same store
     if (barcode && barcode !== existingProduct.barcode) {
-      const barcodeExists = await prisma.product.findUnique({
-        where: { barcode },
+      const barcodeExists = await prisma.product.findFirst({
+        where: {
+          barcode,
+          storeId: existingProduct.storeId,
+          id: { not: params.id },
+        },
       });
 
       if (barcodeExists) {
         return NextResponse.json(
-          { error: 'Product with this barcode already exists' },
+          { error: 'Product with this barcode already exists in this store' },
           { status: 400 }
         );
       }

@@ -18,13 +18,13 @@ async function checkConflicts() {
     
     // Check if any new barcodes already exist
     for (const barcode of newBarcodes) {
-      const existing = await prisma.product.findUnique({
+      const existing = await prisma.product.findFirst({
         where: { barcode },
-        select: { name: true, barcode: true }
+        select: { name: true, barcode: true, store: { select: { name: true } } }
       });
       
       if (existing) {
-        console.log(`❌ CONFLICT: ${barcode} already exists (${existing.name})`);
+        console.log(`❌ CONFLICT: ${barcode} already exists (${existing.name} in ${existing.store?.name})`);
       } else {
         console.log(`✅ ${barcode} - available`);
       }

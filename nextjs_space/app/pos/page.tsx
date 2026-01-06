@@ -345,8 +345,18 @@ export default function POSPage() {
 
   const handlePayment = async (paymentMethod: 'CASH' | 'CARD', amountPaid: number, changeGiven: number) => {
     try {
+      if (!selectedStore) {
+        toast({
+          title: 'Error',
+          description: 'Please select a store first',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       const saleData = {
         customerId: selectedCustomer?.id || null,
+        storeId: selectedStore.id,
         items: cart?.map?.(item => ({
           productId: item?.product?.id,
           quantity: item?.quantity,

@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const period = searchParams.get('period') || 'today';
+    const storeId = searchParams.get('storeId');
 
     let startDate: Date;
     const endDate = new Date();
@@ -29,14 +30,21 @@ export async function GET(request: Request) {
         startDate.setHours(0, 0, 0, 0);
     }
 
+    // Build where clause
+    const whereClause: any = {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+    };
+
+    if (storeId) {
+      whereClause.storeId = storeId;
+    }
+
     // Total sales
     const totalSales = await prisma.sale.aggregate({
-      where: {
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
+      where: whereClause,
       _sum: {
         total: true,
       },
@@ -44,18 +52,31 @@ export async function GET(request: Request) {
     });
 
     // Sales by day
-    const salesByDay = await prisma.$queryRaw<
-      Array<{ date: string; total: number; count: bigint }>
-    >`
-      SELECT 
-        DATE("createdAt") as date,
-        SUM(total) as total,
-        COUNT(*) as count
-      FROM "Sale"
-      WHERE "createdAt" >= ${startDate} AND "createdAt" <= ${endDate}
-      GROUP BY DATE("createdAt")
-      ORDER BY date ASC
-    `;
+    const salesByDay = storeId
+      ? await prisma.$queryRaw<
+          Array<{ date: string; total: number; count: bigint }>
+        >`
+          SELECT 
+            DATE("createdAt") as date,
+            SUM(total) as total,
+            COUNT(*) as count
+          FROM "Sale"
+          WHERE "createdAt" >= ${startDate} AND "createdAt" <= ${endDate} AND "storeId" = ${storeId}
+          GROUP BY DATE("createdAt")
+          ORDER BY date ASC
+        `
+      : await prisma.$queryRaw<
+          Array<{ date: string; total: number; count: bigint }>
+        >`
+          SELECT 
+            DATE("createdAt") as date,
+            SUM(total) as total,
+            COUNT(*) as count
+          FROM "Sale"
+          WHERE "createdAt" >= ${startDate} AND "createdAt" <= ${endDate}
+          GROUP BY DATE("createdAt")
+          ORDER BY date ASC
+        `;
 
     // Convert BigInt to number for JSON serialization
     const formattedSalesByDay = salesByDay?.map?.((item) => ({
@@ -68,12 +89,7 @@ export async function GET(request: Request) {
     const topProducts = await prisma.saleItem.groupBy({
       by: ['productId'],
       where: {
-        sale: {
-          createdAt: {
-            gte: startDate,
-            lte: endDate,
-          },
-        },
+        sale: whereClause,
       },
       _sum: {
         quantity: true,
@@ -103,14 +119,21 @@ export async function GET(request: Request) {
     );
 
     // Low stock products
-    const lowStockProducts = await prisma.product.findMany({
-      where: {
-        stock: {
-          lte: prisma.product.fields.reorderLevel,
-        },
+    const lowStockProductsWhere: any = {
+      stock: {
+        lte: prisma.product.fields.reorderLevel,
       },
+    };
+    
+    if (storeId) {
+      lowStockProductsWhere.storeId = storeId;
+    }
+
+    const lowStockProducts = await prisma.product.findMany({
+      where: lowStockProductsWhere,
       include: {
         category: true,
+        store: true,
       },
       orderBy: {
         stock: 'asc',
@@ -121,12 +144,7 @@ export async function GET(request: Request) {
     // Sales by payment method
     const salesByPaymentMethod = await prisma.sale.groupBy({
       by: ['paymentMethod'],
-      where: {
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
+      where: whereClause,
       _sum: {
         total: true,
       },

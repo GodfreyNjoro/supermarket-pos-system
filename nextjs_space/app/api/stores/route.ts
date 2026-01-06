@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
-import prisma from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 // GET /api/stores - Get all stores
 export async function GET(request: NextRequest) {
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Only admins can create stores
-    if (session.user.role !== 'ADMIN') {
+    if ((session.user as any)?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Forbidden - Admin access required' },
         { status: 403 }
@@ -92,7 +92,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Only admins can update stores
-    if (session.user.role !== 'ADMIN') {
+    if ((session.user as any)?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Forbidden - Admin access required' },
         { status: 403 }
@@ -140,7 +140,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Only admins can delete stores
-    if (session.user.role !== 'ADMIN') {
+    if ((session.user as any)?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Forbidden - Admin access required' },
         { status: 403 }

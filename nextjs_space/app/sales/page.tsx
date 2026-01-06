@@ -5,19 +5,27 @@ import { Navigation } from '@/components/navigation';
 import { useEffect, useState } from 'react';
 import { Receipt, CreditCard, Banknote, User } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
+import { useStore } from '@/lib/contexts/store-context';
 
 export default function SalesPage() {
+  const { selectedStore } = useStore();
   const [sales, setSales] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSales();
-  }, []);
+    if (selectedStore) {
+      fetchSales();
+    }
+  }, [selectedStore]);
 
   const fetchSales = async () => {
     try {
+      if (!selectedStore) {
+        return;
+      }
+
       setLoading(true);
-      const res = await fetch('/api/sales?limit=50');
+      const res = await fetch(`/api/sales?storeId=${selectedStore.id}&limit=50`);
       const data = await res.json();
       setSales(data);
     } catch (error) {

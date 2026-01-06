@@ -38,9 +38,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
         // Auto-select store based on user's assigned store or first active store
         if (session?.user) {
-          if (session.user.storeId) {
+          const userStoreId = (session.user as any)?.storeId;
+          if (userStoreId) {
             // User is assigned to a specific store
-            const userStore = data.find((s: Store) => s.id === session.user.storeId);
+            const userStore = data.find((s: Store) => s.id === userStoreId);
             if (userStore) {
               setSelectedStoreState(userStore);
               localStorage.setItem('selectedStoreId', userStore.id);

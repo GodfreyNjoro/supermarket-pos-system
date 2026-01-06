@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { BarChart, Bar, XAxis, YAxis, CartesianAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { useStore } from '@/lib/contexts/store-context';
 
 interface Stats {
   totalSales: number;
@@ -31,18 +32,25 @@ interface Stats {
 }
 
 export default function DashboardPage() {
+  const { selectedStore } = useStore();
   const [stats, setStats] = useState<Stats | null>(null);
   const [period, setPeriod] = useState('today');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStats();
-  }, [period]);
+    if (selectedStore) {
+      fetchStats();
+    }
+  }, [period, selectedStore]);
 
   const fetchStats = async () => {
     try {
+      if (!selectedStore) {
+        return;
+      }
+
       setLoading(true);
-      const res = await fetch(`/api/sales/stats?period=${period}`);
+      const res = await fetch(`/api/sales/stats?period=${period}&storeId=${selectedStore.id}`);
       const data = await res.json();
       setStats(data);
     } catch (error) {
