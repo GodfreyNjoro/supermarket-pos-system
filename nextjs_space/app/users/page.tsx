@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { SessionGuard } from '@/components/session-guard';
+import { Navigation } from '@/components/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Edit, Shield, Users } from 'lucide-react';
+import { Plus, Edit, Shield } from 'lucide-react';
 import { hasPermission, ROLE_PERMISSIONS } from '@/lib/permissions';
 import { toast } from 'sonner';
 
@@ -122,12 +124,15 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold">User Management</h1>
-          <p className="text-muted-foreground">Manage users and their roles</p>
-        </div>
+    <SessionGuard>
+      <div className="flex h-screen flex-col overflow-hidden">
+        <Navigation />
+        <div className="flex-1 overflow-auto p-4">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h1 className="text-xl font-bold">User Management</h1>
+              <p className="text-sm text-muted-foreground">Manage users and their roles</p>
+            </div>
         {canManage && (
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
@@ -265,6 +270,8 @@ export default function UsersPage() {
           </CardContent>
         </Card>
       )}
-    </div>
+        </div>
+      </div>
+    </SessionGuard>
   );
 }

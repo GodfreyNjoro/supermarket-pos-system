@@ -429,13 +429,163 @@ async function main() {
 
   console.log(`✅ Created ${customers.length} customers`);
 
+  // Get products for creating sample data
+  const downtownProducts = await prisma.product.findMany({ where: { storeId: stores[0].id }, take: 10 });
+
+  // Create sample sales
+  console.log('💰 Creating sample sales...');
+  const sampleSales = [];
+  for (let i = 0; i < 15; i++) {
+    const saleProducts = downtownProducts.slice(0, Math.floor(Math.random() * 4) + 1);
+    const items = saleProducts.map(p => ({
+      productId: p.id,
+      quantity: Math.floor(Math.random() * 3) + 1,
+      unitPrice: p.price,
+      subtotal: p.price * (Math.floor(Math.random() * 3) + 1)
+    }));
+    const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const total = subtotal;
+    
+    const sale = await prisma.sale.create({
+      data: {
+        receiptNumber: `RCP-${Date.now()}-${i}`,
+        userId: cashierUser.id,
+        storeId: stores[0].id,
+        customerId: customers[i % customers.length].id,
+        subtotal,
+        total,
+        paymentMethod: i % 2 === 0 ? 'CASH' : 'CARD',
+        amountPaid: Math.ceil(total),
+        changeGiven: Math.ceil(total) - total,
+        createdAt: new Date(Date.now() - i * 86400000), // Spread over past days
+        items: { create: items }
+      }
+    });
+    sampleSales.push(sale);
+  }
+  console.log(`✅ Created ${sampleSales.length} sample sales`);
+
+  // Create purchase orders
+  console.log('📦 Creating purchase orders...');
+  const purchaseOrders = [];
+  for (let i = 0; i < 5; i++) {
+    const supplier = suppliers[i % suppliers.length];
+    const orderProducts = downtownProducts.slice(i * 2, i * 2 + 3);
+    const items = orderProducts.map(p => ({
+      productId: p.id,
+      orderedQuantity: 50 + i * 10,
+      receivedQuantity: i < 3 ? 50 + i * 10 : 0,
+      unitCost: p.price * 0.6,
+      total: (50 + i * 10) * p.price * 0.6
+    }));
+    const subtotal = items.reduce((sum, item) => sum + item.total, 0);
+
+    const po = await prisma.purchaseOrder.create({
+      data: {
+        orderNumber: `PO-${Date.now()}-${i}`,
+        supplierId: supplier.id,
+        storeId: stores[0].id,
+        createdById: adminUser.id,
+        status: i < 2 ? 'RECEIVED' : i < 4 ? 'SENT' : 'DRAFT',
+        subtotal,
+        total: subtotal,
+        expectedDate: new Date(Date.now() + 7 * 86400000),
+        receivedDate: i < 2 ? new Date() : null,
+        items: { create: items }
+      }
+    });
+    purchaseOrders.push(po);
+  }
+  console.log(`✅ Created ${purchaseOrders.length} purchase orders`);
+
+  // Create stock adjustments
+  console.log('📝 Creating stock adjustments...');
+  const adjustmentTypes: ('CORRECTION' | 'DAMAGED' | 'EXPIRED' | 'RETURNED')[] = ['CORRECTION', 'DAMAGED', 'EXPIRED', 'RETURNED'];
+  for (let i = 0; i < 10; i++) {
+    const product = downtownProducts[i % downtownProducts.length];
+    const type = adjustmentTypes[i % adjustmentTypes.length];
+    const change = type === 'RETURNED' ? 5 : -(Math.floor(Math.random() * 5) + 1);
+    
+    await prisma.stockAdjustment.create({
+      data: {
+        referenceNumber: `ADJ-${Date.now()}-${i}`,
+        productId: product.id,
+        storeId: stores[0].id,
+        userId: inventoryUser.id,
+        type: type,
+        quantityBefore: product.stock,
+        quantityChange: change,
+        quantityAfter: product.stock + change,
+        reason: `${type.toLowerCase()} - demo data`,
+        createdAt: new Date(Date.now() - i * 86400000)
+      }
+    });
+  }
+  console.log(`✅ Created 10 stock adjustments`);
+
+  // Create stock transfers
+  console.log('🔄 Creating stock transfers...');
+  for (let i = 0; i < 3; i++) {
+    const transferProducts = downtownProducts.slice(i * 2, i * 2 + 2);
+    await prisma.stockTransfer.create({
+      data: {
+        transferNumber: `TRF-${Date.now()}-${i}`,
+        fromStoreId: stores[0].id,
+        toStoreId: stores[1].id,
+        createdById: managerUser.id,
+        status: i === 0 ? 'COMPLETED' : 'PENDING',
+        completedAt: i === 0 ? new Date() : null,
+        items: {
+          create: transferProducts.map(p => ({
+            barcode: p.barcode,
+            productName: p.name,
+            quantity: 10 + i * 5
+          }))
+        }
+      }
+    });
+  }
+  console.log(`✅ Created 3 stock transfers`);
+
+  // Create returns
+  console.log('↩️ Creating sample returns...');
+  if (sampleSales.length > 0) {
+    const saleForReturn = await prisma.sale.findFirst({
+      where: { id: sampleSales[0].id },
+      include: { items: true }
+    });
+    if (saleForReturn && saleForReturn.items.length > 0) {
+      await prisma.return.create({
+        data: {
+          returnNumber: `RTN-${Date.now()}`,
+          saleId: saleForReturn.id,
+          reason: 'Product defective - demo data',
+          totalRefund: saleForReturn.items[0].subtotal,
+          items: {
+            create: [{
+              productId: saleForReturn.items[0].productId,
+              quantity: 1,
+              refundAmount: saleForReturn.items[0].subtotal
+            }]
+          }
+        }
+      });
+    }
+  }
+  console.log(`✅ Created sample returns`);
+
   console.log('✨ Database seeding completed successfully!');
   console.log('\n📊 Summary:');
   console.log(`   Stores: ${stores.length}`);
-  console.log(`   Users: 5 (2 Admin, 3 Cashier)`);
+  console.log(`   Suppliers: ${suppliers.length}`);
+  console.log(`   Users: 7 (Admin, Manager, Inventory Clerk, Cashiers)`);
   console.log(`   Categories: ${categories.length}`);
-  console.log(`   Products: ${productCount} (${productTemplates.length} unique products across ${stores.length} stores)`);
+  console.log(`   Products: ${productCount}`);
   console.log(`   Customers: ${customers.length}`);
+  console.log(`   Sales: ${sampleSales.length}`);
+  console.log(`   Purchase Orders: ${purchaseOrders.length}`);
+  console.log(`   Stock Adjustments: 10`);
+  console.log(`   Stock Transfers: 3`);
 }
 
 main()

@@ -27,135 +27,149 @@ export interface ReceiptData {
 }
 
 export class ReceiptGenerator {
-  private static RECEIPT_WIDTH = 80; // mm for thermal printer
-  private static FONT_SIZE = 10;
-  private static LINE_HEIGHT = 5;
+  private static RECEIPT_WIDTH = 72; // mm standard thermal receipt width
+  private static FONT_SIZE = 8;
+  private static LINE_HEIGHT = 4;
+  private static MARGIN = 3;
 
   /**
    * Generate a PDF receipt
    */
   static generatePDF(data: ReceiptData): jsPDF {
+    // Calculate dynamic height based on items
+    const baseHeight = 100;
+    const itemHeight = data.items.length * this.LINE_HEIGHT;
+    const totalHeight = Math.max(baseHeight + itemHeight, 150);
+
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: [this.RECEIPT_WIDTH, 297] // A4 height
+      format: [this.RECEIPT_WIDTH, totalHeight]
     });
 
-    let yPosition = 10;
+    const centerX = this.RECEIPT_WIDTH / 2;
+    const rightX = this.RECEIPT_WIDTH - this.MARGIN;
+    let y = 8;
 
     // Store header
-    doc.setFontSize(14);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text(data.storeName || 'Supermarket POS', this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT + 2;
+    doc.text(data.storeName || 'SuperPOS', centerX, y, { align: 'center' });
+    y += 5;
 
     // Store info
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
     if (data.storeAddress) {
-      doc.text(data.storeAddress, this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-      yPosition += this.LINE_HEIGHT;
+      doc.text(data.storeAddress, centerX, y, { align: 'center' });
+      y += 3;
     }
     if (data.storePhone) {
-      doc.text(data.storePhone, this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-      yPosition += this.LINE_HEIGHT;
+      doc.text(`Tel: ${data.storePhone}`, centerX, y, { align: 'center' });
+      y += 3;
     }
 
-    // Separator
-    yPosition += 2;
-    doc.text('='.repeat(40), this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT;
+    // Separator line
+    y += 1;
+    doc.setLineWidth(0.2);
+    doc.line(this.MARGIN, y, rightX, y);
+    y += 4;
 
     // Receipt details
     doc.setFontSize(this.FONT_SIZE);
-    doc.text(`Receipt #: ${data.saleId}`, 5, yPosition);
-    yPosition += this.LINE_HEIGHT;
-    doc.text(`Date: ${data.date.toLocaleString()}`, 5, yPosition);
-    yPosition += this.LINE_HEIGHT;
-    doc.text(`Cashier: ${data.cashier}`, 5, yPosition);
-    yPosition += this.LINE_HEIGHT;
-
+    doc.text(`Receipt: ${data.saleId.slice(-12)}`, this.MARGIN, y);
+    y += this.LINE_HEIGHT;
+    doc.text(`Date: ${data.date.toLocaleDateString()} ${data.date.toLocaleTimeString()}`, this.MARGIN, y);
+    y += this.LINE_HEIGHT;
+    doc.text(`Cashier: ${data.cashier}`, this.MARGIN, y);
+    y += this.LINE_HEIGHT;
     if (data.customer) {
-      doc.text(`Customer: ${data.customer.name}`, 5, yPosition);
-      yPosition += this.LINE_HEIGHT;
+      doc.text(`Customer: ${data.customer.name}`, this.MARGIN, y);
+      y += this.LINE_HEIGHT;
     }
 
-    // Separator
-    yPosition += 2;
-    doc.text('-'.repeat(40), this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT;
+    // Items separator
+    y += 1;
+    doc.line(this.MARGIN, y, rightX, y);
+    y += 3;
 
     // Items header
     doc.setFont('helvetica', 'bold');
-    doc.text('Item', 5, yPosition);
-    doc.text('Qty', 45, yPosition);
-    doc.text('Price', 55, yPosition);
-    doc.text('Total', 68, yPosition);
-    yPosition += this.LINE_HEIGHT;
-
-    doc.text('-'.repeat(40), this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT;
+    doc.setFontSize(7);
+    doc.text('Item', this.MARGIN, y);
+    doc.text('Qty', 38, y, { align: 'center' });
+    doc.text('Price', 50, y, { align: 'center' });
+    doc.text('Total', rightX, y, { align: 'right' });
+    y += 3;
+    doc.line(this.MARGIN, y, rightX, y);
+    y += 3;
 
     // Items
     doc.setFont('helvetica', 'normal');
     data.items.forEach(item => {
-      // Item name (truncate if too long)
-      const itemName = item.name.length > 20 ? item.name.substring(0, 17) + '...' : item.name;
-      doc.text(itemName, 5, yPosition);
-      doc.text(item.quantity.toString(), 47, yPosition);
-      doc.text(`$${item.price.toFixed(2)}`, 55, yPosition);
-      doc.text(`$${item.total.toFixed(2)}`, 68, yPosition);
-      yPosition += this.LINE_HEIGHT;
+      const itemName = item.name.length > 18 ? item.name.substring(0, 16) + '..' : item.name;
+      doc.text(itemName, this.MARGIN, y);
+      doc.text(item.quantity.toString(), 38, y, { align: 'center' });
+      doc.text(`$${item.price.toFixed(2)}`, 50, y, { align: 'center' });
+      doc.text(`$${item.total.toFixed(2)}`, rightX, y, { align: 'right' });
+      y += this.LINE_HEIGHT;
     });
 
-    // Separator
-    yPosition += 2;
-    doc.text('-'.repeat(40), this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT;
+    // Totals separator
+    y += 1;
+    doc.line(this.MARGIN, y, rightX, y);
+    y += 4;
 
-    // Totals
-    doc.text(`Subtotal:`, 45, yPosition);
-    doc.text(`$${data.subtotal.toFixed(2)}`, 68, yPosition);
-    yPosition += this.LINE_HEIGHT;
+    // Totals - right aligned
+    const labelX = 35;
+    doc.text('Subtotal:', labelX, y);
+    doc.text(`$${data.subtotal.toFixed(2)}`, rightX, y, { align: 'right' });
+    y += this.LINE_HEIGHT;
 
     if (data.discount > 0) {
-      doc.text(`Discount:`, 45, yPosition);
-      doc.text(`-$${data.discount.toFixed(2)}`, 68, yPosition);
-      yPosition += this.LINE_HEIGHT;
+      doc.text('Discount:', labelX, y);
+      doc.text(`-$${data.discount.toFixed(2)}`, rightX, y, { align: 'right' });
+      y += this.LINE_HEIGHT;
     }
 
-    doc.text(`Tax:`, 45, yPosition);
-    doc.text(`$${data.tax.toFixed(2)}`, 68, yPosition);
-    yPosition += this.LINE_HEIGHT;
+    doc.text('Tax:', labelX, y);
+    doc.text(`$${data.tax.toFixed(2)}`, rightX, y, { align: 'right' });
+    y += this.LINE_HEIGHT;
 
-    // Total
+    // Total line
+    doc.setLineWidth(0.3);
+    doc.line(labelX - 2, y, rightX, y);
+    y += 4;
+
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(12);
-    doc.text(`TOTAL:`, 45, yPosition);
-    doc.text(`$${data.total.toFixed(2)}`, 68, yPosition);
-    yPosition += this.LINE_HEIGHT + 2;
+    doc.setFontSize(10);
+    doc.text('TOTAL:', labelX, y);
+    doc.text(`$${data.total.toFixed(2)}`, rightX, y, { align: 'right' });
+    y += 5;
 
     // Payment info
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(this.FONT_SIZE);
-    doc.text(`Payment: ${data.paymentMethod}`, 45, yPosition);
-    doc.text(`$${data.amountPaid.toFixed(2)}`, 68, yPosition);
-    yPosition += this.LINE_HEIGHT;
+    doc.text(`Paid (${data.paymentMethod}):`, labelX, y);
+    doc.text(`$${data.amountPaid.toFixed(2)}`, rightX, y, { align: 'right' });
+    y += this.LINE_HEIGHT;
 
     if (data.change > 0) {
-      doc.text(`Change:`, 45, yPosition);
-      doc.text(`$${data.change.toFixed(2)}`, 68, yPosition);
-      yPosition += this.LINE_HEIGHT;
+      doc.text('Change:', labelX, y);
+      doc.text(`$${data.change.toFixed(2)}`, rightX, y, { align: 'right' });
+      y += this.LINE_HEIGHT;
     }
 
     // Footer
-    yPosition += 5;
-    doc.text('='.repeat(40), this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT;
+    y += 4;
+    doc.setLineWidth(0.2);
+    doc.line(this.MARGIN, y, rightX, y);
+    y += 4;
     doc.setFontSize(8);
-    doc.text('Thank you for your business!', this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
-    yPosition += this.LINE_HEIGHT;
-    doc.text('Please come again', this.RECEIPT_WIDTH / 2, yPosition, { align: 'center' });
+    doc.text('Thank you for shopping!', centerX, y, { align: 'center' });
+    y += 3;
+    doc.setFontSize(7);
+    doc.text('Please come again', centerX, y, { align: 'center' });
 
     return doc;
   }

@@ -476,15 +476,24 @@ export default function POSPage() {
               {/* Barcode Scanner */}
               <div className="rounded-xl bg-white p-6 shadow-sm">
                 <h2 className="mb-4 text-lg font-semibold text-gray-900">Barcode Scanner</h2>
-                <form onSubmit={handleBarcodeSubmit} className="flex space-x-3">
-                  <input
-                    ref={barcodeInputRef}
-                    type="text"
-                    value={barcode}
-                    onChange={(e) => setBarcode(e.target.value)}
-                    placeholder="Scan or enter barcode..."
-                    className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
+                <form onSubmit={handleBarcodeSubmit} className="flex space-x-3 relative">
+                  <div className="flex-1 relative">
+                    <input
+                      ref={barcodeInputRef}
+                      type="text"
+                      value={barcode}
+                      onChange={(e) => setBarcode(e.target.value)}
+                      placeholder="Scan or enter barcode..."
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      list="barcode-suggestions"
+                      autoComplete="off"
+                    />
+                    <datalist id="barcode-suggestions">
+                      {allProducts.slice(0, 10).map(p => (
+                        <option key={p.id} value={p.barcode}>{p.name} - ${p.price}</option>
+                      ))}
+                    </datalist>
+                  </div>
                   <button
                     type="submit"
                     className="rounded-lg bg-emerald-600 px-6 py-2 font-medium text-white hover:bg-emerald-700"
