@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, CreditCard, Banknote, Loader2, Download, Printer } from 'lucide-react';
 import { ReceiptGenerator, ReceiptData } from '@/lib/receipt-generator';
 import { useSession } from 'next-auth/react';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 interface PaymentModalProps {
   total: number;
@@ -34,6 +35,7 @@ export function PaymentModal({
   saleData = null
 }: PaymentModalProps) {
   const { data: session } = useSession() || {};
+  const { formatPrice } = useCurrency();
   const [paymentMethod, setPaymentMethod] = useState<'CASH' | 'CARD'>('CASH');
   const [amountPaid, setAmountPaid] = useState(total?.toString?.() ?? '0');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -142,7 +144,7 @@ export function PaymentModal({
             <div className="rounded-lg bg-emerald-50 p-4 text-center">
               <p className="text-sm text-emerald-700">Transaction Complete</p>
               <p className="text-3xl font-bold text-emerald-700">
-                ${saleData.total?.toFixed(2)}
+                {formatPrice(saleData.total ?? 0)}
               </p>
               <p className="mt-2 text-xs text-emerald-600">
                 Receipt #{saleData.id}
@@ -153,7 +155,7 @@ export function PaymentModal({
               <div className="rounded-lg bg-blue-50 p-4 text-center">
                 <p className="text-sm text-blue-700">Change Given</p>
                 <p className="text-2xl font-bold text-blue-700">
-                  ${saleData.changeGiven?.toFixed(2)}
+                  {formatPrice(saleData.changeGiven ?? 0)}
                 </p>
               </div>
             )}
@@ -243,7 +245,7 @@ export function PaymentModal({
           <div className="rounded-lg bg-gray-50 p-4">
             <div className="flex justify-between text-lg">
               <span className="text-gray-600">Total:</span>
-              <span className="font-bold text-gray-900">${total?.toFixed?.(2) ?? '0.00'}</span>
+              <span className="font-bold text-gray-900">{formatPrice(total ?? 0)}</span>
             </div>
           </div>
 
@@ -261,7 +263,7 @@ export function PaymentModal({
                         onClick={() => setAmountPaid(amount.toString())}
                         className="rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
                       >
-                        ${amount}
+                        {formatPrice(amount)}
                       </button>
                     ))}
                   </div>
@@ -288,7 +290,7 @@ export function PaymentModal({
                 <div className="flex justify-between text-lg">
                   <span className="text-emerald-700">Change:</span>
                   <span className="font-bold text-emerald-700">
-                    ${calculateChange()?.toFixed?.(2) ?? '0.00'}
+                    {formatPrice(calculateChange() ?? 0)}
                   </span>
                 </div>
               </div>

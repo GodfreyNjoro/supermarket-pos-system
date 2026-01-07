@@ -174,6 +174,7 @@ export default function InventoryPage() {
                     <Select value={adjustForm.type} onValueChange={v => setAdjustForm({ ...adjustForm, type: v })}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="RESTOCK">Restock</SelectItem>
                         <SelectItem value="CORRECTION">Correction</SelectItem>
                         <SelectItem value="DAMAGED">Damaged</SelectItem>
                         <SelectItem value="EXPIRED">Expired</SelectItem>

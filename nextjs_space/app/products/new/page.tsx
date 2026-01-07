@@ -12,6 +12,7 @@ import { toast, Toaster } from 'react-hot-toast';
 export default function NewProductPage() {
   const router = useRouter();
   const [categories, setCategories] = useState<any[]>([]);
+  const [suppliers, setSuppliers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ export default function NewProductPage() {
     stock: '',
     reorderLevel: '10',
     categoryId: '',
+    supplierId: '',
     imageUrl: '',
     cloud_storage_path: '',
     isPublic: true,
@@ -29,6 +31,7 @@ export default function NewProductPage() {
 
   useEffect(() => {
     fetchCategories();
+    fetchSuppliers();
   }, []);
 
   const fetchCategories = async () => {
@@ -38,6 +41,16 @@ export default function NewProductPage() {
       setCategories(data);
     } catch (error) {
       console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchSuppliers = async () => {
+    try {
+      const res = await fetch('/api/suppliers');
+      const data = await res.json();
+      setSuppliers(data);
+    } catch (error) {
+      console.error('Error fetching suppliers:', error);
     }
   };
 
@@ -266,6 +279,25 @@ export default function NewProductPage() {
                       className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label htmlFor="supplier" className="block text-sm font-medium text-gray-700">
+                    Supplier
+                  </label>
+                  <select
+                    id="supplier"
+                    value={formData.supplierId}
+                    onChange={(e) => setFormData({ ...formData, supplierId: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Select Supplier (Optional)</option>
+                    {suppliers?.map?.((supplier) => (
+                      <option key={supplier?.id} value={supplier?.id}>
+                        {supplier?.name}
+                      </option>
+                    )) ?? null}
+                  </select>
                 </div>
 
                 <div>

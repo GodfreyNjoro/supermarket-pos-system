@@ -58,6 +58,7 @@ enum StockAdjustmentType {
   TRANSFER_IN
   TRANSFER_OUT
   RETURNED
+  RESTOCK
 }
 
 enum PurchaseOrderStatus {
