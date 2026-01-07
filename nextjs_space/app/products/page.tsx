@@ -10,9 +10,11 @@ import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import { useStore } from '@/lib/contexts/store-context';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 export default function ProductsPage() {
   const { selectedStore } = useStore();
+  const { formatPrice } = useCurrency();
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -188,7 +190,7 @@ export default function ProductsPage() {
                     <div className="mb-4 flex items-center justify-between">
                       <div>
                         <p className="text-2xl font-bold text-emerald-600">
-                          ${product?.price?.toFixed?.(2) ?? '0.00'}
+                          {formatPrice(product?.price ?? 0)}
                         </p>
                       </div>
                       <div className="text-right">

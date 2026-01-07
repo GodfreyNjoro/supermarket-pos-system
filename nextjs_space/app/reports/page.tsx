@@ -6,10 +6,12 @@ import { Navigation } from '@/components/navigation';
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DollarSign, TrendingUp, Package } from 'lucide-react';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 const COLORS = ['#10b981', '#60A5FA', '#F59E0B', '#EF4444'];
 
 export default function ReportsPage() {
+  const { formatPrice } = useCurrency();
   const [stats, setStats] = useState<any>(null);
   const [period, setPeriod] = useState('month');
   const [loading, setLoading] = useState(true);
@@ -70,7 +72,7 @@ export default function ReportsPage() {
                       <div>
                         <p className="text-sm font-medium text-gray-600">Total Revenue</p>
                         <p className="mt-2 text-3xl font-bold text-gray-900">
-                          ${stats?.totalSales?.toFixed?.(2) ?? '0.00'}
+                          {formatPrice(stats?.totalSales ?? 0)}
                         </p>
                       </div>
                       <div className="rounded-full bg-emerald-100 p-3">
@@ -98,9 +100,9 @@ export default function ReportsPage() {
                       <div>
                         <p className="text-sm font-medium text-gray-600">Avg Transaction</p>
                         <p className="mt-2 text-3xl font-bold text-gray-900">
-                          ${stats?.totalTransactions && stats?.totalSales
-                            ? (stats.totalSales / stats.totalTransactions)?.toFixed?.(2) ?? '0.00'
-                            : '0.00'}
+                          {formatPrice(stats?.totalTransactions && stats?.totalSales
+                            ? stats.totalSales / stats.totalTransactions
+                            : 0)}
                         </p>
                       </div>
                       <div className="rounded-full bg-purple-100 p-3">
@@ -180,7 +182,7 @@ export default function ReportsPage() {
                               </div>
                             </div>
                             <p className="font-semibold text-gray-900">
-                              ${item?.revenue?.toFixed?.(2) ?? '0.00'}
+                              {formatPrice(item?.revenue ?? 0)}
                             </p>
                           </div>
                         )) ?? null

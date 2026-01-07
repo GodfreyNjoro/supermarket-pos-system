@@ -7,8 +7,10 @@ import { useEffect, useState } from 'react';
 import { RotateCcw, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Toaster } from 'react-hot-toast';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 export default function ReturnsPage() {
+  const { formatPrice } = useCurrency();
   const [returns, setReturns] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -72,7 +74,7 @@ export default function ReturnsPage() {
                       </div>
                       <div className="text-right">
                         <p className="text-2xl font-bold text-red-600">
-                          -${returnItem?.totalRefund?.toFixed?.(2) ?? '0.00'}
+                          -{formatPrice(returnItem?.totalRefund ?? 0)}
                         </p>
                       </div>
                     </div>
@@ -97,7 +99,7 @@ export default function ReturnsPage() {
                         {returnItem?.items?.map?.((item: any) => (
                           <div key={item?.id} className="flex justify-between text-sm text-gray-600">
                             <span>{item?.product?.name} x{item?.quantity}</span>
-                            <span>${item?.refundAmount?.toFixed?.(2) ?? '0.00'}</span>
+                            <span>{formatPrice(item?.refundAmount ?? 0)}</span>
                           </div>
                         )) ?? null}
                       </div>

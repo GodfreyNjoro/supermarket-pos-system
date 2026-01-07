@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { Receipt, CreditCard, Banknote, User } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { useStore } from '@/lib/contexts/store-context';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 export default function SalesPage() {
   const { selectedStore } = useStore();
+  const { formatPrice } = useCurrency();
   const [sales, setSales] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,7 +70,7 @@ export default function SalesPage() {
                     </div>
                     <div className="text-right">
                       <p className="text-2xl font-bold text-emerald-600">
-                        ${sale?.total?.toFixed?.(2) ?? '0.00'}
+                        {formatPrice(sale?.total ?? 0)}
                       </p>
                     </div>
                   </div>
@@ -106,7 +108,7 @@ export default function SalesPage() {
                       {sale?.items?.map?.((item: any) => (
                         <div key={item?.id} className="flex justify-between text-sm text-gray-600">
                           <span>{item?.product?.name} x{item?.quantity}</span>
-                          <span>${item?.subtotal?.toFixed?.(2) ?? '0.00'}</span>
+                          <span>{formatPrice(item?.subtotal ?? 0)}</span>
                         </div>
                       )) ?? null}
                     </div>

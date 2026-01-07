@@ -13,6 +13,7 @@ import {
 import Link from 'next/link';
 import { BarChart, Bar, XAxis, YAxis, CartesianAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { useStore } from '@/lib/contexts/store-context';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 interface Stats {
   totalSales: number;
@@ -33,6 +34,7 @@ interface Stats {
 
 export default function DashboardPage() {
   const { selectedStore } = useStore();
+  const { formatPrice } = useCurrency();
   const [stats, setStats] = useState<Stats | null>(null);
   const [period, setPeriod] = useState('today');
   const [loading, setLoading] = useState(true);
@@ -100,7 +102,7 @@ export default function DashboardPage() {
                     <div>
                       <p className="text-sm font-medium text-gray-600">Total Sales</p>
                       <p className="mt-2 text-3xl font-bold text-gray-900">
-                        ${stats?.totalSales?.toFixed?.(2) ?? '0.00'}
+                        {formatPrice(stats?.totalSales ?? 0)}
                       </p>
                     </div>
                     <div className="rounded-full bg-emerald-100 p-3">
@@ -207,7 +209,7 @@ export default function DashboardPage() {
                           </div>
                           <div className="text-right">
                             <p className="font-semibold text-gray-900">
-                              ${item?.revenue?.toFixed?.(2) ?? '0.00'}
+                              {formatPrice(item?.revenue ?? 0)}
                             </p>
                           </div>
                         </div>
