@@ -13,6 +13,9 @@ import {
   LogOut,
   Menu,
   X,
+  Truck,
+  Boxes,
+  UserCog,
 } from 'lucide-react';
 import { useState } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
@@ -26,19 +29,23 @@ export function Navigation() {
   const userRole = (session?.user as any)?.role;
   const isAdmin = userRole === 'ADMIN';
 
+  const isManagerOrAdmin = userRole === 'ADMIN' || userRole === 'MANAGER';
+  const isInventoryOrAbove = isManagerOrAdmin || userRole === 'INVENTORY_CLERK';
+
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: BarChart3, adminOnly: false },
-    { name: 'POS/Checkout', href: '/pos', icon: ShoppingCart, adminOnly: false },
-    { name: 'Products', href: '/products', icon: Package, adminOnly: true },
-    { name: 'Customers', href: '/customers', icon: Users, adminOnly: true },
-    { name: 'Sales', href: '/sales', icon: Receipt, adminOnly: false },
-    { name: 'Reports', href: '/reports', icon: BarChart3, adminOnly: true },
-    { name: 'Returns', href: '/returns', icon: RotateCcw, adminOnly: true },
+    { name: 'Dashboard', href: '/dashboard', icon: BarChart3, show: true },
+    { name: 'POS', href: '/pos', icon: ShoppingCart, show: true },
+    { name: 'Products', href: '/products', icon: Package, show: isManagerOrAdmin },
+    { name: 'Inventory', href: '/inventory', icon: Boxes, show: isInventoryOrAbove },
+    { name: 'Suppliers', href: '/suppliers', icon: Truck, show: isInventoryOrAbove },
+    { name: 'Customers', href: '/customers', icon: Users, show: isManagerOrAdmin },
+    { name: 'Sales', href: '/sales', icon: Receipt, show: true },
+    { name: 'Reports', href: '/reports', icon: BarChart3, show: isManagerOrAdmin },
+    { name: 'Returns', href: '/returns', icon: RotateCcw, show: isManagerOrAdmin },
+    { name: 'Users', href: '/users', icon: UserCog, show: isAdmin },
   ];
 
-  const filteredNavigation = navigation.filter(
-    (item) => !item.adminOnly || isAdmin
-  );
+  const filteredNavigation = navigation.filter((item) => item.show);
 
   return (
     <>

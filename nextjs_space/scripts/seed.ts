@@ -8,6 +8,11 @@ async function main() {
 
   // Clear existing data
   console.log('🗑️  Clearing existing data...');
+  await prisma.stockTransferItem.deleteMany();
+  await prisma.stockTransfer.deleteMany();
+  await prisma.stockAdjustment.deleteMany();
+  await prisma.purchaseOrderItem.deleteMany();
+  await prisma.purchaseOrder.deleteMany();
   await prisma.returnItem.deleteMany();
   await prisma.return.deleteMany();
   await prisma.saleItem.deleteMany();
@@ -16,6 +21,7 @@ async function main() {
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.supplier.deleteMany();
   await prisma.store.deleteMany();
 
   // Create stores
@@ -52,6 +58,65 @@ async function main() {
 
   console.log(`✅ Created ${stores.length} stores`);
 
+  // Create suppliers
+  console.log('🚚 Creating suppliers...');
+  const suppliers = await Promise.all([
+    prisma.supplier.create({
+      data: {
+        code: 'SUP001',
+        name: 'Fresh Farms Dairy',
+        contactPerson: 'Mike Johnson',
+        email: 'mike@freshfarms.com',
+        phone: '+1-555-2001',
+        address: '100 Farm Road',
+        city: 'Springfield',
+        paymentTerms: 'Net 30',
+        leadTimeDays: 3,
+      },
+    }),
+    prisma.supplier.create({
+      data: {
+        code: 'SUP002',
+        name: 'Golden Harvest Bakery',
+        contactPerson: 'Sarah Baker',
+        email: 'sarah@goldenharvest.com',
+        phone: '+1-555-2002',
+        address: '200 Baker Street',
+        city: 'Springfield',
+        paymentTerms: 'Net 15',
+        leadTimeDays: 1,
+      },
+    }),
+    prisma.supplier.create({
+      data: {
+        code: 'SUP003',
+        name: 'Valley Fresh Produce',
+        contactPerson: 'Tom Green',
+        email: 'tom@valleyfresh.com',
+        phone: '+1-555-2003',
+        address: '300 Valley Lane',
+        city: 'Riverdale',
+        paymentTerms: 'Net 7',
+        leadTimeDays: 2,
+      },
+    }),
+    prisma.supplier.create({
+      data: {
+        code: 'SUP004',
+        name: 'Premium Meats Co.',
+        contactPerson: 'Bob Carter',
+        email: 'bob@premiummeats.com',
+        phone: '+1-555-2004',
+        address: '400 Industrial Park',
+        city: 'Westfield',
+        paymentTerms: 'Net 30',
+        leadTimeDays: 5,
+      },
+    }),
+  ]);
+
+  console.log(`✅ Created ${suppliers.length} suppliers`);
+
   // Create users
   console.log('👥 Creating users...');
   const hashedPassword1 = await bcrypt.hash('johndoe123', 10);
@@ -59,6 +124,8 @@ async function main() {
   const hashedPassword3 = await bcrypt.hash('cashier123', 10);
   const hashedPassword4 = await bcrypt.hash('cashier2', 10);
   const hashedPassword5 = await bcrypt.hash('cashier3', 10);
+  const hashedPassword6 = await bcrypt.hash('manager123', 10);
+  const hashedPassword7 = await bcrypt.hash('inventory123', 10);
 
   const adminUser = await prisma.user.create({
     data: {
@@ -110,7 +177,29 @@ async function main() {
     },
   });
 
-  console.log(`✅ Created ${5} users`);
+  // Create Manager
+  const managerUser = await prisma.user.create({
+    data: {
+      email: 'manager@pos.com',
+      name: 'Store Manager',
+      password: hashedPassword6,
+      role: 'MANAGER',
+      storeId: stores[0].id,
+    },
+  });
+
+  // Create Inventory Clerk
+  const inventoryUser = await prisma.user.create({
+    data: {
+      email: 'inventory@pos.com',
+      name: 'Inventory Clerk',
+      password: hashedPassword7,
+      role: 'INVENTORY_CLERK',
+      storeId: stores[0].id,
+    },
+  });
+
+  console.log(`✅ Created 7 users`);
 
   // Create categories
   console.log('📂 Creating categories...');

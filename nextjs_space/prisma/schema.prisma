@@ -11,7 +11,61 @@ datasource db {
 
 enum Role {
   ADMIN
+  MANAGER
   CASHIER
+  INVENTORY_CLERK
+}
+
+enum Permission {
+  // Sales
+  VIEW_SALES
+  CREATE_SALES
+  VOID_SALES
+  VIEW_REPORTS
+  
+  // Products
+  VIEW_PRODUCTS
+  CREATE_PRODUCTS
+  EDIT_PRODUCTS
+  DELETE_PRODUCTS
+  
+  // Inventory
+  VIEW_INVENTORY
+  ADJUST_INVENTORY
+  TRANSFER_STOCK
+  
+  // Suppliers
+  VIEW_SUPPLIERS
+  MANAGE_SUPPLIERS
+  CREATE_PURCHASE_ORDERS
+  RECEIVE_ORDERS
+  
+  // Users
+  VIEW_USERS
+  MANAGE_USERS
+  
+  // Settings
+  MANAGE_SETTINGS
+  MANAGE_STORES
+}
+
+enum StockAdjustmentType {
+  RECEIVED
+  DAMAGED
+  EXPIRED
+  LOST
+  CORRECTION
+  TRANSFER_IN
+  TRANSFER_OUT
+  RETURNED
+}
+
+enum PurchaseOrderStatus {
+  DRAFT
+  SENT
+  PARTIAL
+  RECEIVED
+  CANCELLED
 }
 
 enum PaymentMethod {
@@ -20,34 +74,44 @@ enum PaymentMethod {
 }
 
 model Store {
-  id        String    @id @default(cuid())
-  name      String
-  address   String?
-  phone     String?
-  email     String?
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  users     User[]
-  products  Product[]
-  sales     Sale[]
+  id               String            @id @default(cuid())
+  name             String
+  address          String?
+  phone            String?
+  email            String?
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  users            User[]
+  products         Product[]
+  sales            Sale[]
+  stockAdjustments StockAdjustment[]
+  transfersFrom    StockTransfer[]   @relation("TransferFrom")
+  transfersTo      StockTransfer[]   @relation("TransferTo")
+  purchaseOrders   PurchaseOrder[]
   
   @@index([name])
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  role      Role     @default(CASHIER)
-  storeId   String?  // Optional: null means access to all stores (ADMIN)
-  store     Store?   @relation(fields: [storeId], references: [id], onDelete: SetNull)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sales     Sale[]
+  id               String            @id @default(cuid())
+  email            String            @unique
+  name             String?
+  password         String
+  role             Role              @default(CASHIER)
+  storeId          String?           // Optional: null means access to all stores (ADMIN)
+  store            Store?            @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  sales            Sale[]
+  stockAdjustments StockAdjustment[]
+  transfersCreated StockTransfer[]   @relation("TransferCreator")
+  ordersCreated    PurchaseOrder[]   @relation("OrderCreator")
+  ordersReceived   PurchaseOrder[]   @relation("OrderReceiver")
   
   @@index([storeId])
+  @@index([role])
 }
 
 model Category {
@@ -59,29 +123,41 @@ model Category {
 }
 
 model Product {
-  id                String      @id @default(cuid())
-  barcode           String
-  name              String
-  description       String?
-  price             Float
-  stock             Int         @default(0)
-  reorderLevel      Int         @default(10)
-  categoryId        String
-  category          Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  storeId           String
-  store             Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  imageUrl          String?
+  id                 String            @id @default(cuid())
+  barcode            String
+  sku                String?
+  name               String
+  description        String?
+  price              Float
+  costPrice          Float             @default(0)
+  stock              Int               @default(0)
+  reorderLevel       Int               @default(10)
+  maxStock           Int               @default(100)
+  categoryId         String
+  category           Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  storeId            String
+  store              Store             @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  supplierId         String?
+  supplier           Supplier?         @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  imageUrl           String?
   cloud_storage_path String?
-  isPublic          Boolean     @default(true)
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  saleItems         SaleItem[]
-  returnItems       ReturnItem[]
+  isPublic           Boolean           @default(true)
+  isActive           Boolean           @default(true)
+  expiryDate         DateTime?
+  batchNumber        String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  saleItems          SaleItem[]
+  returnItems        ReturnItem[]
+  stockAdjustments   StockAdjustment[]
+  purchaseOrderItems PurchaseOrderItem[]
   
-  @@unique([barcode, storeId]) // Same barcode can exist in different stores
+  @@unique([barcode, storeId])
+  @@unique([sku, storeId])
   @@index([categoryId])
   @@index([barcode])
   @@index([storeId])
+  @@index([supplierId])
 }
 
 model Customer {
@@ -169,4 +245,133 @@ model ReturnItem {
   
   @@index([returnId])
   @@index([productId])
+}
+
+// ============== SUPPLIER MANAGEMENT ==============
+
+model Supplier {
+  id             String          @id @default(cuid())
+  code           String          @unique
+  name           String
+  contactPerson  String?
+  email          String?
+  phone          String?
+  address        String?
+  city           String?
+  country        String?
+  paymentTerms   String?         // e.g., "Net 30", "Net 60"
+  leadTimeDays   Int             @default(7)
+  isActive       Boolean         @default(true)
+  rating         Float?          // 1-5 rating
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  products       Product[]
+  purchaseOrders PurchaseOrder[]
+  
+  @@index([name])
+  @@index([code])
+}
+
+model PurchaseOrder {
+  id              String              @id @default(cuid())
+  orderNumber     String              @unique
+  supplierId      String
+  supplier        Supplier            @relation(fields: [supplierId], references: [id])
+  storeId         String
+  store           Store               @relation(fields: [storeId], references: [id])
+  createdById     String
+  createdBy       User                @relation("OrderCreator", fields: [createdById], references: [id])
+  receivedById    String?
+  receivedBy      User?               @relation("OrderReceiver", fields: [receivedById], references: [id])
+  status          PurchaseOrderStatus @default(DRAFT)
+  subtotal        Float               @default(0)
+  tax             Float               @default(0)
+  shipping        Float               @default(0)
+  total           Float               @default(0)
+  notes           String?
+  expectedDate    DateTime?
+  receivedDate    DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  items           PurchaseOrderItem[]
+  
+  @@index([supplierId])
+  @@index([storeId])
+  @@index([status])
+  @@index([orderNumber])
+}
+
+model PurchaseOrderItem {
+  id               String        @id @default(cuid())
+  purchaseOrderId  String
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product       @relation(fields: [productId], references: [id])
+  orderedQuantity  Int
+  receivedQuantity Int           @default(0)
+  unitCost         Float
+  total            Float
+  createdAt        DateTime      @default(now())
+  
+  @@index([purchaseOrderId])
+  @@index([productId])
+}
+
+// ============== INVENTORY MANAGEMENT ==============
+
+model StockAdjustment {
+  id             String              @id @default(cuid())
+  referenceNumber String             @unique
+  productId      String
+  product        Product             @relation(fields: [productId], references: [id])
+  storeId        String
+  store          Store               @relation(fields: [storeId], references: [id])
+  userId         String
+  user           User                @relation(fields: [userId], references: [id])
+  type           StockAdjustmentType
+  quantityBefore Int
+  quantityChange Int                 // positive or negative
+  quantityAfter  Int
+  reason         String?
+  batchNumber    String?
+  expiryDate     DateTime?
+  createdAt      DateTime            @default(now())
+  
+  @@index([productId])
+  @@index([storeId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model StockTransfer {
+  id              String   @id @default(cuid())
+  transferNumber  String   @unique
+  fromStoreId     String
+  fromStore       Store    @relation("TransferFrom", fields: [fromStoreId], references: [id])
+  toStoreId       String
+  toStore         Store    @relation("TransferTo", fields: [toStoreId], references: [id])
+  createdById     String
+  createdBy       User     @relation("TransferCreator", fields: [createdById], references: [id])
+  status          String   @default("PENDING") // PENDING, IN_TRANSIT, COMPLETED, CANCELLED
+  notes           String?
+  createdAt       DateTime @default(now())
+  completedAt     DateTime?
+  items           StockTransferItem[]
+  
+  @@index([fromStoreId])
+  @@index([toStoreId])
+  @@index([status])
+}
+
+model StockTransferItem {
+  id              String        @id @default(cuid())
+  transferId      String
+  transfer        StockTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
+  barcode         String
+  productName     String
+  quantity        Int
+  createdAt       DateTime      @default(now())
+  
+  @@index([transferId])
 }
