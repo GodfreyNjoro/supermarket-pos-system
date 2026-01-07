@@ -4,17 +4,22 @@ import { SessionGuard } from '@/components/session-guard';
 import { RoleGuard } from '@/components/role-guard';
 import { Navigation } from '@/components/navigation';
 import { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, Package, AlertTriangle } from 'lucide-react';
+import { Plus, Edit, Trash2, Package, AlertTriangle, Printer } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import { useStore } from '@/lib/contexts/store-context';
 import { useCurrency } from '@/lib/contexts/currency-context';
+import { printBarcode } from '@/lib/barcode-utils';
 
 export default function ProductsPage() {
   const { selectedStore } = useStore();
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currency } = useCurrency();
+
+  const handlePrintBarcode = (barcode: string, name: string, price: number) => {
+    printBarcode(barcode, name, price, currency.symbol);
+  };
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -213,6 +218,13 @@ export default function ProductsPage() {
                     )}
 
                     <div className="flex space-x-2">
+                      <button
+                        onClick={() => handlePrintBarcode(product?.barcode, product?.name, product?.price)}
+                        className="flex items-center justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+                        title="Print Barcode"
+                      >
+                        <Printer className="h-4 w-4" />
+                      </button>
                       <Link
                         href={`/products/${product?.id}/edit`}
                         className="flex flex-1 items-center justify-center space-x-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"

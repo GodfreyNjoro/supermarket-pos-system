@@ -3,18 +3,22 @@
 import { SessionGuard } from '@/components/session-guard';
 import { RoleGuard } from '@/components/role-guard';
 import { Navigation } from '@/components/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Upload, Loader2 } from 'lucide-react';
+import { ArrowLeft, Upload, Loader2, RefreshCw, Printer, Download } from 'lucide-react';
 import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
+import { generateBarcodeNumber, generateBarcodeSVG, printBarcode, downloadBarcode } from '@/lib/barcode-utils';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 export default function NewProductPage() {
   const router = useRouter();
+  const { currency } = useCurrency();
   const [categories, setCategories] = useState<any[]>([]);
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const barcodeRef = useRef<SVGSVGElement>(null);
   const [formData, setFormData] = useState({
     barcode: '',
     name: '',
@@ -32,7 +36,43 @@ export default function NewProductPage() {
   useEffect(() => {
     fetchCategories();
     fetchSuppliers();
+    // Auto-generate barcode on load
+    const newBarcode = generateBarcodeNumber();
+    setFormData(prev => ({ ...prev, barcode: newBarcode }));
   }, []);
+
+  // Generate barcode SVG when barcode changes
+  useEffect(() => {
+    if (formData.barcode && formData.barcode.length === 13) {
+      // Wait for DOM to be ready
+      const timer = setTimeout(() => {
+        const element = document.getElementById('barcode-preview');
+        if (element) {
+          generateBarcodeSVG(formData.barcode, 'barcode-preview');
+        }
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [formData.barcode]);
+
+  const regenerateBarcode = () => {
+    const newBarcode = generateBarcodeNumber();
+    setFormData(prev => ({ ...prev, barcode: newBarcode }));
+    toast.success('New barcode generated');
+  };
+
+  const handlePrintBarcode = () => {
+    if (formData.barcode) {
+      printBarcode(formData.barcode, formData.name || 'New Product', parseFloat(formData.price) || undefined, currency.symbol);
+    }
+  };
+
+  const handleDownloadBarcode = () => {
+    if (formData.barcode) {
+      downloadBarcode(formData.barcode, formData.name || 'new-product');
+      toast.success('Barcode downloaded');
+    }
+  };
 
   const fetchCategories = async () => {
     try {
@@ -169,34 +209,62 @@ export default function NewProductPage() {
               <h1 className="mb-6 text-2xl font-bold text-gray-900">Add New Product</h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid gap-6 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="barcode" className="block text-sm font-medium text-gray-700">
-                      Barcode *
-                    </label>
+                <div>
+                  <label htmlFor="barcode" className="block text-sm font-medium text-gray-700">
+                    Barcode (Auto-generated)
+                  </label>
+                  <div className="mt-1 flex items-center gap-2">
                     <input
                       id="barcode"
                       type="text"
                       required
                       value={formData.barcode}
-                      onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      readOnly
+                      className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-700"
                     />
+                    <button
+                      type="button"
+                      onClick={regenerateBarcode}
+                      className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                      title="Generate new barcode"
+                    >
+                      <RefreshCw className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePrintBarcode}
+                      className="rounded-lg bg-emerald-100 p-2 text-emerald-600 hover:bg-emerald-200"
+                      title="Print barcode"
+                    >
+                      <Printer className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDownloadBarcode}
+                      className="rounded-lg bg-blue-100 p-2 text-blue-600 hover:bg-blue-200"
+                      title="Download barcode"
+                    >
+                      <Download className="h-5 w-5" />
+                    </button>
                   </div>
+                  {/* Barcode Preview */}
+                  <div className="mt-3 flex justify-center rounded-lg border border-gray-200 bg-white p-4">
+                    <svg id="barcode-preview" ref={barcodeRef}></svg>
+                  </div>
+                </div>
 
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                      Product Name *
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    Product Name *
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
                 </div>
 
                 <div>
