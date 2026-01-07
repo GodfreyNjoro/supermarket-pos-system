@@ -24,6 +24,7 @@ export interface ReceiptData {
   storeName?: string;
   storeAddress?: string;
   storePhone?: string;
+  currencySymbol?: string;
 }
 
 export class ReceiptGenerator {
@@ -105,13 +106,14 @@ export class ReceiptGenerator {
     y += 3;
 
     // Items
+    const cs = data.currencySymbol || 'KSh';
     doc.setFont('helvetica', 'normal');
     data.items.forEach(item => {
       const itemName = item.name.length > 18 ? item.name.substring(0, 16) + '..' : item.name;
       doc.text(itemName, this.MARGIN, y);
       doc.text(item.quantity.toString(), 38, y, { align: 'center' });
-      doc.text(`$${item.price.toFixed(2)}`, 50, y, { align: 'center' });
-      doc.text(`$${item.total.toFixed(2)}`, rightX, y, { align: 'right' });
+      doc.text(`${cs} ${item.price.toFixed(2)}`, 50, y, { align: 'center' });
+      doc.text(`${cs} ${item.total.toFixed(2)}`, rightX, y, { align: 'right' });
       y += this.LINE_HEIGHT;
     });
 
@@ -123,17 +125,17 @@ export class ReceiptGenerator {
     // Totals - right aligned
     const labelX = 35;
     doc.text('Subtotal:', labelX, y);
-    doc.text(`$${data.subtotal.toFixed(2)}`, rightX, y, { align: 'right' });
+    doc.text(`${cs} ${data.subtotal.toFixed(2)}`, rightX, y, { align: 'right' });
     y += this.LINE_HEIGHT;
 
     if (data.discount > 0) {
       doc.text('Discount:', labelX, y);
-      doc.text(`-$${data.discount.toFixed(2)}`, rightX, y, { align: 'right' });
+      doc.text(`-${cs} ${data.discount.toFixed(2)}`, rightX, y, { align: 'right' });
       y += this.LINE_HEIGHT;
     }
 
     doc.text('Tax:', labelX, y);
-    doc.text(`$${data.tax.toFixed(2)}`, rightX, y, { align: 'right' });
+    doc.text(`${cs} ${data.tax.toFixed(2)}`, rightX, y, { align: 'right' });
     y += this.LINE_HEIGHT;
 
     // Total line
@@ -144,19 +146,19 @@ export class ReceiptGenerator {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.text('TOTAL:', labelX, y);
-    doc.text(`$${data.total.toFixed(2)}`, rightX, y, { align: 'right' });
+    doc.text(`${cs} ${data.total.toFixed(2)}`, rightX, y, { align: 'right' });
     y += 5;
 
     // Payment info
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(this.FONT_SIZE);
     doc.text(`Paid (${data.paymentMethod}):`, labelX, y);
-    doc.text(`$${data.amountPaid.toFixed(2)}`, rightX, y, { align: 'right' });
+    doc.text(`${cs} ${data.amountPaid.toFixed(2)}`, rightX, y, { align: 'right' });
     y += this.LINE_HEIGHT;
 
     if (data.change > 0) {
       doc.text('Change:', labelX, y);
-      doc.text(`$${data.change.toFixed(2)}`, rightX, y, { align: 'right' });
+      doc.text(`${cs} ${data.change.toFixed(2)}`, rightX, y, { align: 'right' });
       y += this.LINE_HEIGHT;
     }
 
@@ -330,8 +332,8 @@ export class ReceiptGenerator {
                 <tr>
                   <td>${item.name}</td>
                   <td class="text-right">${item.quantity}</td>
-                  <td class="text-right">$${item.price.toFixed(2)}</td>
-                  <td class="text-right">$${item.total.toFixed(2)}</td>
+                  <td class="text-right">${data.currencySymbol || 'KSh'} ${item.price.toFixed(2)}</td>
+                  <td class="text-right">${data.currencySymbol || 'KSh'} ${item.total.toFixed(2)}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -341,30 +343,30 @@ export class ReceiptGenerator {
             <table>
               <tr>
                 <td>Subtotal:</td>
-                <td class="text-right">$${data.subtotal.toFixed(2)}</td>
+                <td class="text-right">${data.currencySymbol || 'KSh'} ${data.subtotal.toFixed(2)}</td>
               </tr>
               ${data.discount > 0 ? `
               <tr>
                 <td>Discount:</td>
-                <td class="text-right">-$${data.discount.toFixed(2)}</td>
+                <td class="text-right">-${data.currencySymbol || 'KSh'} ${data.discount.toFixed(2)}</td>
               </tr>
               ` : ''}
               <tr>
                 <td>Tax:</td>
-                <td class="text-right">$${data.tax.toFixed(2)}</td>
+                <td class="text-right">${data.currencySymbol || 'KSh'} ${data.tax.toFixed(2)}</td>
               </tr>
               <tr class="total-row">
                 <td><strong>TOTAL:</strong></td>
-                <td class="text-right"><strong>$${data.total.toFixed(2)}</strong></td>
+                <td class="text-right"><strong>${data.currencySymbol || 'KSh'} ${data.total.toFixed(2)}</strong></td>
               </tr>
               <tr>
                 <td>Payment (${data.paymentMethod}):</td>
-                <td class="text-right">$${data.amountPaid.toFixed(2)}</td>
+                <td class="text-right">${data.currencySymbol || 'KSh'} ${data.amountPaid.toFixed(2)}</td>
               </tr>
               ${data.change > 0 ? `
               <tr>
                 <td>Change:</td>
-                <td class="text-right">$${data.change.toFixed(2)}</td>
+                <td class="text-right">${data.currencySymbol || 'KSh'} ${data.change.toFixed(2)}</td>
               </tr>
               ` : ''}
             </table>

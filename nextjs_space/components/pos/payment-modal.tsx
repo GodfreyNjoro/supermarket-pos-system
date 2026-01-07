@@ -35,7 +35,7 @@ export function PaymentModal({
   saleData = null
 }: PaymentModalProps) {
   const { data: session } = useSession() || {};
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currency } = useCurrency();
   const [paymentMethod, setPaymentMethod] = useState<'CASH' | 'CARD'>('CASH');
   const [amountPaid, setAmountPaid] = useState(total?.toString?.() ?? '0');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -112,6 +112,7 @@ export function PaymentModal({
       storeName: 'Supermarket POS',
       storeAddress: '123 Main Street, City, State',
       storePhone: '+1 (555) 123-4567',
+      currencySymbol: currency.symbol,
     };
   };
 
