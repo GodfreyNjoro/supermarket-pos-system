@@ -8,9 +8,11 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Search, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 export default function NewReturnPage() {
   const router = useRouter();
+  const { formatPrice } = useCurrency();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sales, setSales] = useState<any[]>([]);
@@ -174,7 +176,7 @@ export default function NewReturnPage() {
                               </div>
                               <div className="text-right">
                                 <p className="font-semibold text-gray-900">
-                                  ${sale?.total?.toFixed?.(2) ?? '0.00'}
+                                  {formatPrice(sale?.total ?? 0)}
                                 </p>
                                 {sale?.customer && (
                                   <p className="text-sm text-gray-500">{sale.customer.name}</p>
@@ -220,7 +222,7 @@ export default function NewReturnPage() {
                               <div className="flex-1">
                                 <p className="font-medium text-gray-900">{item?.productName}</p>
                                 <p className="text-sm text-gray-500">
-                                  Max: {item?.maxQuantity} @ ${item?.unitPrice?.toFixed?.(2) ?? '0.00'}
+                                  Max: {item?.maxQuantity} @ {formatPrice(item?.unitPrice ?? 0)}
                                 </p>
                               </div>
                               <div className="flex items-center space-x-3">
@@ -233,7 +235,7 @@ export default function NewReturnPage() {
                                   className="w-20 rounded-lg border border-gray-300 px-3 py-1 text-center focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 />
                                 <span className="w-24 text-right font-semibold text-gray-900">
-                                  ${item?.refundAmount?.toFixed?.(2) ?? '0.00'}
+                                  {formatPrice(item?.refundAmount ?? 0)}
                                 </span>
                               </div>
                             </div>
@@ -261,7 +263,7 @@ export default function NewReturnPage() {
                       <div className="flex justify-between text-lg font-bold">
                         <span className="text-emerald-700">Total Refund:</span>
                         <span className="text-emerald-700">
-                          ${calculateTotalRefund()?.toFixed?.(2) ?? '0.00'}
+                          {formatPrice(calculateTotalRefund() ?? 0)}
                         </span>
                       </div>
                     </div>
