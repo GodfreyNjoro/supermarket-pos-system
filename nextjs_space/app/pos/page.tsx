@@ -29,6 +29,7 @@ import { offlineDB, OfflineTransaction } from '@/lib/indexeddb';
 import { toast } from '@/hooks/use-toast';
 import { useKeyboardShortcuts, formatShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useStore } from '@/lib/contexts/store-context';
+import { useCurrency } from '@/lib/contexts/currency-context';
 
 interface CartItem {
   product: any;
@@ -41,6 +42,7 @@ export default function POSPage() {
   const { data: session } = useSession() || {};
   const { isOnline } = useOnlineStatus();
   const { selectedStore } = useStore();
+  const { formatPrice } = useCurrency();
   const [barcode, setBarcode] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -543,7 +545,7 @@ export default function POSPage() {
                               className="rounded-lg border border-gray-200 p-2 text-left text-sm hover:border-emerald-500 hover:bg-emerald-50"
                             >
                               <div className="font-medium truncate">{product.name}</div>
-                              <div className="text-emerald-600">${product.price.toFixed(2)}</div>
+                              <div className="text-emerald-600">{formatPrice(product.price)}</div>
                             </button>
                           ))}
                         </div>
@@ -563,7 +565,7 @@ export default function POSPage() {
                               className="rounded-lg border border-gray-200 p-2 text-left text-sm hover:border-emerald-500 hover:bg-emerald-50"
                             >
                               <div className="font-medium truncate">{product.name}</div>
-                              <div className="text-emerald-600">${product.price.toFixed(2)}</div>
+                              <div className="text-emerald-600">{formatPrice(product.price)}</div>
                             </button>
                           ))}
                         </div>
@@ -671,7 +673,7 @@ export default function POSPage() {
                         <p className="mt-1 text-sm text-gray-500">{product?.category?.name}</p>
                         <div className="mt-2 flex items-center justify-between">
                           <span className="text-lg font-bold text-emerald-600">
-                            ${product?.price?.toFixed?.(2) ?? '0.00'}
+                            {formatPrice(product?.price ?? 0)}
                           </span>
                           <span className="text-sm text-gray-500">Stock: {product?.stock ?? 0}</span>
                         </div>
@@ -722,7 +724,7 @@ export default function POSPage() {
                           <div className="flex-1">
                             <h4 className="font-medium text-gray-900">{item?.product?.name}</h4>
                             <p className="text-sm text-gray-500">
-                              ${item?.product?.price?.toFixed?.(2) ?? '0.00'} each
+                              {formatPrice(item?.product?.price ?? 0)} each
                             </p>
                           </div>
                           <button
@@ -749,7 +751,7 @@ export default function POSPage() {
                             </button>
                           </div>
                           <span className="font-semibold text-gray-900">
-                            ${item?.subtotal?.toFixed?.(2) ?? '0.00'}
+                            {formatPrice(item?.subtotal ?? 0)}
                           </span>
                         </div>
                       </div>
@@ -792,19 +794,19 @@ export default function POSPage() {
                 <div className="mt-4 space-y-2 border-t border-gray-200 pt-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Subtotal:</span>
-                    <span className="font-medium">${calculateSubtotal()?.toFixed?.(2) ?? '0.00'}</span>
+                    <span className="font-medium">{formatPrice(calculateSubtotal() ?? 0)}</span>
                   </div>
                   {discountValue > 0 && (
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Discount:</span>
                       <span className="font-medium text-red-600">
-                        -${calculateDiscount()?.toFixed?.(2) ?? '0.00'}
+                        -{formatPrice(calculateDiscount() ?? 0)}
                       </span>
                     </div>
                   )}
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total:</span>
-                    <span className="text-emerald-600">${calculateTotal()?.toFixed?.(2) ?? '0.00'}</span>
+                    <span className="text-emerald-600">{formatPrice(calculateTotal() ?? 0)}</span>
                   </div>
                 </div>
 

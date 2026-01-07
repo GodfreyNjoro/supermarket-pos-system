@@ -20,6 +20,7 @@ import {
 import { useState } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
 import { StoreSelector } from '@/components/store-selector';
+import { CurrencySelector } from '@/components/currency-selector';
 
 export function Navigation() {
   const { data: session } = useSession() || {};
@@ -85,6 +86,7 @@ export function Navigation() {
 
             <div className="flex items-center space-x-4">
               <OfflineIndicator />
+              <CurrencySelector />
               <StoreSelector />
               <div className="hidden text-sm text-gray-600 md:block">
                 <span className="font-medium">{session?.user?.name}</span>

@@ -15,7 +15,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      router.replace('/dashboard');
+      router.replace('/pos');
     }
   }, [status, router]);
 
@@ -34,7 +34,7 @@ export default function Home() {
       if (result?.error) {
         setError('Invalid email or password');
       } else if (result?.ok) {
-        router.replace('/dashboard');
+        router.replace('/pos');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
