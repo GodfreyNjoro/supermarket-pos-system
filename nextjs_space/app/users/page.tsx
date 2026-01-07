@@ -168,10 +168,10 @@ export default function UsersPage() {
                 </div>
                 <div>
                   <Label>Assigned Store</Label>
-                  <Select value={formData.storeId} onValueChange={v => setFormData({ ...formData, storeId: v })}>
+                  <Select value={formData.storeId || 'all'} onValueChange={v => setFormData({ ...formData, storeId: v === 'all' ? '' : v })}>
                     <SelectTrigger><SelectValue placeholder="All stores (Admin only)" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Stores</SelectItem>
+                      <SelectItem value="all">All Stores</SelectItem>
                       {stores.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                     </SelectContent>
                   </Select>
