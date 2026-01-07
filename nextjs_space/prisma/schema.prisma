@@ -102,6 +102,8 @@ model User {
   storeId          String?           // Optional: null means access to all stores (ADMIN)
   store            Store?            @relation(fields: [storeId], references: [id], onDelete: SetNull)
   isActive         Boolean           @default(true)
+  sessionToken     String?           // Current active session token - only one allowed
+  lastLoginAt      DateTime?         // Track last login time
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   sales            Sale[]
