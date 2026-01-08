@@ -22,10 +22,11 @@ import {
   Pin,
   PinOff,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
 import { StoreSelector } from '@/components/store-selector';
 import { CurrencySelector } from '@/components/currency-selector';
+import { useSidebar } from '@/components/page-wrapper';
 
 export function Navigation() {
   const { data: session } = useSession() || {};
@@ -34,21 +35,11 @@ export function Navigation() {
   const [inventoryExpanded, setInventoryExpanded] = useState(
     pathname?.startsWith('/inventory') || pathname?.startsWith('/suppliers')
   );
-  const [isPinned, setIsPinned] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-
-  // Load pinned state from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('sidebar-pinned');
-    if (saved !== null) {
-      setIsPinned(saved === 'true');
-    }
-  }, []);
+  const { isPinned, setIsPinned } = useSidebar();
 
   const togglePin = () => {
-    const newPinned = !isPinned;
-    setIsPinned(newPinned);
-    localStorage.setItem('sidebar-pinned', String(newPinned));
+    setIsPinned(!isPinned);
   };
 
   const sidebarVisible = isPinned || isHovered;
