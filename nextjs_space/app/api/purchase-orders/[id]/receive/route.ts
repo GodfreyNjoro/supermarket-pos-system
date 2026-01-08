@@ -29,7 +29,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     // Process received items
     for (const received of receivedItems) {
-      const item = order.items.find(i => i.id === received.itemId);
+      const item = order.items.find((i: typeof order.items[0]) => i.id === received.itemId);
       if (!item) continue;
 
       const newReceived = item.receivedQuantity + received.quantity;
