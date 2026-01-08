@@ -10,10 +10,12 @@ import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
 import { generateBarcodeNumber, generateBarcodeSVG, printBarcode, downloadBarcode } from '@/lib/barcode-utils';
 import { useCurrency } from '@/lib/contexts/currency-context';
+import { useStore } from '@/lib/contexts/store-context';
 
 export default function NewProductPage() {
   const router = useRouter();
   const { currency } = useCurrency();
+  const { selectedStore } = useStore();
   const [categories, setCategories] = useState<any[]>([]);
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -164,13 +166,19 @@ export default function NewProductPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!selectedStore) {
+      toast.error('Please select a store first');
+      return;
+    }
+    
     setLoading(true);
 
     try {
       const res = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, storeId: selectedStore.id }),
       });
 
       if (res.ok) {
