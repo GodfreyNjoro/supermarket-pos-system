@@ -1,0 +1,79 @@
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+  ▲ Next.js 14.2.28
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/28) ...
+   Generating static pages (7/28) 
+   Generating static pages (14/28) 
+   Generating static pages (21/28) 
+ ✓ Generating static pages (28/28)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size     First Load JS
+┌ ƒ /                                       1.8 kB         99.5 kB
+├ ƒ /_not-found                             877 B          88.4 kB
+├ ƒ /api/auth/[...nextauth]                 0 B                0 B
+├ ƒ /api/auth/validate-session              0 B                0 B
+├ ƒ /api/categories                         0 B                0 B
+├ ƒ /api/customers                          0 B                0 B
+├ ƒ /api/customers/[id]                     0 B                0 B
+├ ƒ /api/inventory/adjustments              0 B                0 B
+├ ƒ /api/inventory/history                  0 B                0 B
+├ ƒ /api/inventory/low-stock                0 B                0 B
+├ ƒ /api/inventory/transfers                0 B                0 B
+├ ƒ /api/inventory/transfers/[id]/complete  0 B                0 B
+├ ƒ /api/products                           0 B                0 B
+├ ƒ /api/products/[id]                      0 B                0 B
+├ ƒ /api/products/import                    0 B                0 B
+├ ƒ /api/products/upload                    0 B                0 B
+├ ƒ /api/purchase-orders                    0 B                0 B
+├ ƒ /api/purchase-orders/[id]               0 B                0 B
+├ ƒ /api/purchase-orders/[id]/receive       0 B                0 B
+├ ƒ /api/returns                            0 B                0 B
+├ ƒ /api/returns/[id]                       0 B                0 B
+├ ƒ /api/sales                              0 B                0 B
+├ ƒ /api/sales/[id]                         0 B                0 B
+├ ƒ /api/sales/stats                        0 B                0 B
+├ ƒ /api/signup                             0 B                0 B
+├ ƒ /api/stores                             0 B                0 B
+├ ƒ /api/suppliers                          0 B                0 B
+├ ƒ /api/suppliers/[id]                     0 B                0 B
+├ ƒ /api/users                              0 B                0 B
+├ ƒ /api/users/[id]                         0 B                0 B
+├ ƒ /customers                              6.88 kB         160 kB
+├ ƒ /dashboard                              2.46 kB         252 kB
+├ ƒ /inventory                              5.67 kB         165 kB
+├ ƒ /inventory/history                      7.6 kB          253 kB
+├ ƒ /pos                                    253 kB          406 kB
+├ ƒ /products                               9.73 kB         179 kB
+├ ƒ /products/[id]/edit                     7.44 kB         160 kB
+├ ƒ /products/import                        8.03 kB         254 kB
+├ ƒ /products/new                           4.29 kB         173 kB
+├ ƒ /reports                                9.28 kB         259 kB
+├ ƒ /returns                                6.45 kB         159 kB
+├ ƒ /returns/new                            7.38 kB         160 kB
+├ ƒ /sales                                  6.44 kB         159 kB
+├ ƒ /suppliers                              3.77 kB         163 kB
+└ ƒ /users                                  5.03 kB         164 kB
++ First Load JS shared by all               87.5 kB
+  ├ chunks/117-b0370400ed2760b7.js          31.8 kB
+  ├ chunks/fd9d1056-898dbe322567f69b.js     53.6 kB
+  └ other shared chunks (total)             2.14 kB
+
+
+ƒ Middleware                                49.5 kB
+
+ƒ  (Dynamic)  server-rendered on demand
+
+Successfully built app artifact

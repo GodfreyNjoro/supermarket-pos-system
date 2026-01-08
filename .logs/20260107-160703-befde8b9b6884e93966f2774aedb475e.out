@@ -1,0 +1,18 @@
+[master 9f510c9] Advanced RBAC, inventory, suppliers
+ 20 files changed, 2274 insertions(+), 79 deletions(-)
+ create mode 100644 nextjs_space/app/api/inventory/adjustments/route.ts
+ create mode 100644 nextjs_space/app/api/inventory/low-stock/route.ts
+ create mode 100644 nextjs_space/app/api/inventory/transfers/[id]/complete/route.ts
+ create mode 100644 nextjs_space/app/api/inventory/transfers/route.ts
+ create mode 100644 nextjs_space/app/api/purchase-orders/[id]/receive/route.ts
+ create mode 100644 nextjs_space/app/api/purchase-orders/[id]/route.ts
+ create mode 100644 nextjs_space/app/api/purchase-orders/route.ts
+ create mode 100644 nextjs_space/app/api/suppliers/[id]/route.ts
+ create mode 100644 nextjs_space/app/api/suppliers/route.ts
+ create mode 100644 nextjs_space/app/api/users/[id]/route.ts
+ create mode 100644 nextjs_space/app/api/users/route.ts
+ create mode 100644 nextjs_space/app/inventory/page.tsx
+ create mode 100644 nextjs_space/app/suppliers/page.tsx
+ create mode 100644 nextjs_space/app/users/page.tsx
+ create mode 100644 nextjs_space/lib/permissions.ts
+###9f510c9a2257106e1a1c1dce4d3ea810fd499395###

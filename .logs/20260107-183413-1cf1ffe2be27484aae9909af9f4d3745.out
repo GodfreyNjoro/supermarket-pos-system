@@ -1,0 +1,4 @@
+[master 0ea0427] Single session enforcement added
+ 5 files changed, 106 insertions(+), 3 deletions(-)
+ create mode 100644 nextjs_space/app/api/auth/validate-session/route.ts
+###0ea0427603886618d24a253a4e2b12fe986abf79###

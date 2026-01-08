@@ -1,0 +1,3 @@
+app/api/products/import/route.ts(67,13): error TS2322: Type '{ productId: string; quantity: number; type: "RESTOCK"; reason: string; userId: any; }' is not assignable to type '(Without<StockAdjustmentCreateInput, StockAdjustmentUncheckedCreateInput> & StockAdjustmentUncheckedCreateInput) | (Without<...> & StockAdjustmentCreateInput)'.
+  Object literal may only specify known properties, and 'quantity' does not exist in type 'Without<StockAdjustmentCreateInput, StockAdjustmentUncheckedCreateInput> & StockAdjustmentUncheckedCreateInput'.
+exit_code=2

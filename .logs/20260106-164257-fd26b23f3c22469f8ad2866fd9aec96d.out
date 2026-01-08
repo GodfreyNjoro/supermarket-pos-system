@@ -1,0 +1,11 @@
+[master ca410e2] PWA offline support added
+ 14 files changed, 885 insertions(+), 23 deletions(-)
+ create mode 100644 nextjs_space/components/install-prompt.tsx
+ create mode 100644 nextjs_space/components/offline-indicator.tsx
+ create mode 100644 nextjs_space/components/pwa-registration.tsx
+ create mode 100644 nextjs_space/hooks/use-online-status.ts
+ create mode 100644 nextjs_space/lib/indexeddb.ts
+ create mode 100644 nextjs_space/lib/sync-manager.ts
+ create mode 100644 nextjs_space/public/manifest.json
+ create mode 100644 nextjs_space/public/sw.js
+###ca410e2901e5cc1cda2dc14a5cdacb165ecb2b39###

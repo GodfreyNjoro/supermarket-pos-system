@@ -1,0 +1,8 @@
+[master 0a390cc] d558ae48-714f-445a-994e-1f3203c99b7c
+ 14 files changed, 822 insertions(+), 50 deletions(-)
+ create mode 100644 nextjs_space/app/api/stores/route.ts
+ create mode 100644 nextjs_space/components/store-selector.tsx
+ create mode 100644 nextjs_space/lib/contexts/store-context.tsx
+ create mode 100644 nextjs_space/prisma/migrations/20260106202812_add_multi_store_support/migration.sql
+ create mode 100644 nextjs_space/prisma/migrations/migration_lock.toml
+###0a390ccacb2bda590982cdd006727957f2f5a9c2###

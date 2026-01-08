@@ -1,0 +1,59 @@
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+  ▲ Next.js 14.2.28
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/15) ...
+   Generating static pages (3/15) 
+   Generating static pages (7/15) 
+   Generating static pages (11/15) 
+ ✓ Generating static pages (15/15)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    1.8 kB         99.3 kB
+├ ƒ /_not-found                          876 B          88.3 kB
+├ ƒ /api/auth/[...nextauth]              0 B                0 B
+├ ƒ /api/categories                      0 B                0 B
+├ ƒ /api/customers                       0 B                0 B
+├ ƒ /api/customers/[id]                  0 B                0 B
+├ ƒ /api/products                        0 B                0 B
+├ ƒ /api/products/[id]                   0 B                0 B
+├ ƒ /api/products/upload                 0 B                0 B
+├ ƒ /api/returns                         0 B                0 B
+├ ƒ /api/returns/[id]                    0 B                0 B
+├ ƒ /api/sales                           0 B                0 B
+├ ƒ /api/sales/[id]                      0 B                0 B
+├ ƒ /api/sales/stats                     0 B                0 B
+├ ƒ /api/signup                          0 B                0 B
+├ ƒ /customers                           8.12 kB         123 kB
+├ ƒ /dashboard                           3.68 kB         215 kB
+├ ƒ /pos                                 8.38 kB         123 kB
+├ ƒ /products                            14 kB           129 kB
+├ ƒ /products/[id]/edit                  2.6 kB          124 kB
+├ ƒ /products/new                        2.4 kB          124 kB
+├ ƒ /reports                             10.5 kB         222 kB
+├ ƒ /returns                             7.72 kB         122 kB
+├ ƒ /returns/new                         2.51 kB         124 kB
+└ ƒ /sales                               7.71 kB         122 kB
++ First Load JS shared by all            87.4 kB
+  ├ chunks/117-41d99a6528af3a15.js       31.8 kB
+  ├ chunks/fd9d1056-898dbe322567f69b.js  53.6 kB
+  └ other shared chunks (total)          2 kB
+
+
+ƒ Middleware                             49.5 kB
+
+ƒ  (Dynamic)  server-rendered on demand
+
+Successfully built app artifact

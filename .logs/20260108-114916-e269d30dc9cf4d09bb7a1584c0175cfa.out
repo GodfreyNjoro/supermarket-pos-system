@@ -1,0 +1,6 @@
+[master f32111c] Left sidebar nav and inventory history
+ 14 files changed, 492 insertions(+), 100 deletions(-)
+ create mode 100644 nextjs_space/app/api/inventory/history/route.ts
+ create mode 100644 nextjs_space/app/inventory/history/page.tsx
+ create mode 100644 nextjs_space/components/page-wrapper.tsx
+###f32111c531149a0a08670d038f0f8d7278079378###

@@ -1,0 +1,2 @@
+scripts/seed.ts(515,9): error TS2322: Type 'string' is not assignable to type 'StockAdjustmentType'.
+exit_code=2

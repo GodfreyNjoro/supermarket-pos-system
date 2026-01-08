@@ -1,0 +1,17 @@
+app/api/products/[id]/route.ts(71,9): error TS2322: Type '{ barcode: any; }' is not assignable to type 'ProductWhereUniqueInput'.
+  Type '{ barcode: any; }' is not assignable to type '{ id: string; barcode_storeId: ProductBarcodeStoreIdCompoundUniqueInput; } & { id?: string | undefined; barcode_storeId?: ProductBarcodeStoreIdCompoundUniqueInput | undefined; ... 19 more ...; returnItems?: ReturnItemListRelationFilter | undefined; }'.
+    Type '{ barcode: any; }' is missing the following properties from type '{ id: string; barcode_storeId: ProductBarcodeStoreIdCompoundUniqueInput; }': id, barcode_storeId
+app/api/stores/route.ts(4,8): error TS2613: Module '"/home/ubuntu/supermarket_pos_system/nextjs_space/lib/db"' has no default export. Did you mean to use 'import { prisma } from "/home/ubuntu/supermarket_pos_system/nextjs_space/lib/db"' instead?
+app/api/stores/route.ts(48,9): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/stores/route.ts(48,22): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/stores/route.ts(95,9): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/stores/route.ts(95,22): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/stores/route.ts(143,9): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/stores/route.ts(143,22): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+lib/contexts/store-context.tsx(41,28): error TS2339: Property 'storeId' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+lib/contexts/store-context.tsx(43,64): error TS18048: 'session.user' is possibly 'undefined'.
+lib/contexts/store-context.tsx(43,77): error TS2339: Property 'storeId' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+scripts/check-barcode-conflicts.ts(22,9): error TS2322: Type '{ barcode: string; }' is not assignable to type 'ProductWhereUniqueInput'.
+  Type '{ barcode: string; }' is not assignable to type '{ id: string; barcode_storeId: ProductBarcodeStoreIdCompoundUniqueInput; } & { id?: string | undefined; barcode_storeId?: ProductBarcodeStoreIdCompoundUniqueInput | undefined; ... 19 more ...; returnItems?: ReturnItemListRelationFilter | undefined; }'.
+    Type '{ barcode: string; }' is missing the following properties from type '{ id: string; barcode_storeId: ProductBarcodeStoreIdCompoundUniqueInput; }': id, barcode_storeId
+exit_code=2

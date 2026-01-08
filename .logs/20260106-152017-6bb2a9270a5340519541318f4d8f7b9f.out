@@ -1,0 +1,55 @@
+  ▲ Next.js 14.2.28
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/15) ...
+   Generating static pages (3/15) 
+   Generating static pages (7/15) 
+   Generating static pages (11/15) 
+ ✓ Generating static pages (15/15)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    2.23 kB        99.4 kB
+├ ƒ /_not-found                          877 B          88.3 kB
+├ ƒ /api/auth/[...nextauth]              0 B                0 B
+├ ƒ /api/categories                      0 B                0 B
+├ ƒ /api/customers                       0 B                0 B
+├ ƒ /api/customers/[id]                  0 B                0 B
+├ ƒ /api/products                        0 B                0 B
+├ ƒ /api/products/[id]                   0 B                0 B
+├ ƒ /api/products/upload                 0 B                0 B
+├ ƒ /api/returns                         0 B                0 B
+├ ƒ /api/returns/[id]                    0 B                0 B
+├ ƒ /api/sales                           0 B                0 B
+├ ƒ /api/sales/[id]                      0 B                0 B
+├ ƒ /api/sales/stats                     0 B                0 B
+├ ƒ /api/signup                          0 B                0 B
+├ ƒ /customers                           7.49 kB         115 kB
+├ ƒ /dashboard                           3.02 kB         207 kB
+├ ƒ /pos                                 6.2 kB          113 kB
+├ ƒ /products                            13.4 kB         121 kB
+├ ƒ /products/[id]/edit                  2.59 kB         116 kB
+├ ƒ /products/new                        2.4 kB          116 kB
+├ ƒ /reports                             9.88 kB         214 kB
+├ ƒ /returns                             7.08 kB         114 kB
+├ ƒ /returns/new                         2.51 kB         116 kB
+└ ƒ /sales                               7.08 kB         114 kB
++ First Load JS shared by all            87.5 kB
+  ├ chunks/156-5c9d6e160cb45a19.js       31.8 kB
+  ├ chunks/ceb5afef-856bc7e126aa3d37.js  53.6 kB
+  └ other shared chunks (total)          2 kB
+
+
+ƒ Middleware                             49.5 kB
+
+ƒ  (Dynamic)  server-rendered on demand
+
+exit_code=0

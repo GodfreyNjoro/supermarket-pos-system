@@ -1,0 +1,72 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 1948ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.5s (636 modules)
+ GET / 200 in 2914ms
+ ✓ Compiled in 396ms (322 modules)
+ GET / 200 in 46ms
+ GET / 200 in 42ms
+ GET / 200 in 35ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1066ms (748 modules)
+ GET / 200 in 970ms
+ GET /api/products 200 in 1441ms
+ GET /api/auth/session 200 in 1607ms
+ ○ Compiling /api/customers ...
+ ✓ Compiled /api/customers in 3.4s (2631 modules)
+ GET /api/auth/session 200 in 2992ms
+ GET /api/customers 200 in 3316ms
+ GET /api/products 200 in 2803ms
+ GET /products 200 in 3872ms
+ GET /pos 200 in 3872ms
+ GET /dashboard 200 in 3404ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 711ms (2636 modules)
+ GET /offline 404 in 743ms
+ GET /api/customers 200 in 733ms
+ GET /api/categories 200 in 803ms
+ GET /api/categories 200 in 24ms
+ ○ Compiling /api/sales/stats ...
+ ✓ Compiled /api/sales/stats in 533ms (1457 modules)
+ GET /api/sales/stats?period=today 200 in 597ms
+ GET /api/sales/stats?period=today 200 in 29ms
+ GET / 200 in 79ms
+ GET / 200 in 37ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 46ms
+ GET / 200 in 42ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 37ms
+ GET / 200 in 35ms
+ GET / 200 in 36ms
+ GET / 200 in 34ms
+ GET / 200 in 36ms
+ GET /api/auth/session 200 in 44ms
+ GET /api/products 200 in 73ms
+ GET / 200 in 60ms
+ GET /api/auth/session 200 in 106ms
+ GET /pos 200 in 141ms
+ GET /products 200 in 132ms
+ GET /api/customers 200 in 96ms
+ GET /api/products 200 in 129ms
+ GET /dashboard 200 in 80ms
+ GET /offline 404 in 21ms
+ GET /api/categories 200 in 33ms
+ GET /api/customers 200 in 37ms
+ GET /api/categories 200 in 23ms
+ GET /api/sales/stats?period=today 200 in 29ms
+ GET /api/sales/stats?period=today 200 in 25ms
+ GET /api/auth/session 200 in 41ms
+ GET / 200 in 35ms
+ GET / 200 in 34ms
+ GET / 200 in 32ms
+ GET /api/auth/session 200 in 41ms
+ GET / 200 in 34ms
+ ✓ Compiled in 718ms (1498 modules)
+[?25h

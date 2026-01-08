@@ -1,0 +1,46 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 2s
+ ○ Compiling / ...
+ ✓ Compiled / in 1840ms (633 modules)
+ GET / 200 in 2257ms
+ ✓ Compiled in 404ms (324 modules)
+ GET / 200 in 45ms
+ GET / 200 in 36ms
+ GET / 200 in 37ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 799ms (750 modules)
+ GET / 200 in 776ms
+ GET /api/products 200 in 1202ms
+ GET /api/auth/session 200 in 1492ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /api/stores in 2.8s (3188 modules)
+ GET /api/products 200 in 2719ms
+ GET /api/customers 200 in 2756ms
+ GET /api/auth/session 200 in 2526ms
+ GET /pos 200 in 3466ms
+ GET /api/stores 200 in 2513ms
+ GET /dashboard 200 in 3059ms
+ GET /dashboard 200 in 79ms
+ GET /api/stores 200 in 209ms
+ ○ Compiling /api/categories ...
+ ✓ Compiled /api/categories in 926ms (3193 modules)
+ GET /api/customers 200 in 1057ms
+ GET /offline 404 in 1329ms
+ GET /api/categories 200 in 1347ms
+ GET /api/categories 200 in 31ms
+ GET /api/customers 200 in 33ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 46ms
+ GET /api/categories 200 in 51ms
+ GET /api/customers 200 in 29ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 41ms
+ GET /api/categories 200 in 40ms
+ GET / 200 in 46ms
+ GET / 200 in 40ms
+ GET / 200 in 37ms
+[?25h

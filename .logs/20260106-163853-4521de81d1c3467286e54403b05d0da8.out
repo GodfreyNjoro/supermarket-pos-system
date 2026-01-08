@@ -1,0 +1,2 @@
+lib/indexeddb.ts(70,36): error TS2345: Argument of type 'false' is not assignable to parameter of type 'IDBValidKey | IDBKeyRange | null | undefined'.
+exit_code=2

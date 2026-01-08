@@ -1,0 +1,6 @@
+[master 5f6ec4d] Quick wins: receipts, shortcuts, filters, templates
+ 8 files changed, 1651 insertions(+), 140 deletions(-)
+ create mode 100644 nextjs_space/app/pos/page.tsx.backup
+ create mode 100644 nextjs_space/hooks/use-keyboard-shortcuts.ts
+ create mode 100644 nextjs_space/lib/receipt-generator.ts
+###5f6ec4d38c8b09d07e2eb6ab8ab1b77199b0536c###

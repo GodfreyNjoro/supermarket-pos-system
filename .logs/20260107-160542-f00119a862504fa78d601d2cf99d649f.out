@@ -1,0 +1,132 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 2.1s
+ ○ Compiling / ...
+ ✓ Compiled / in 1724ms (631 modules)
+ GET / 200 in 2170ms
+ ✓ Compiled in 409ms (323 modules)
+ GET / 200 in 50ms
+ GET / 200 in 47ms
+ GET / 200 in 41ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1042ms (749 modules)
+ GET / 200 in 905ms
+ GET /api/products 200 in 1441ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 74ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 66ms
+ GET /api/auth/session 200 in 1574ms
+ GET /api/products 200 in 37ms
+ GET /api/auth/session 200 in 70ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fproducts 200 in 88ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fpos 200 in 83ms
+ ✓ Compiled /api/customers in 326ms (891 modules)
+ GET /offline 404 in 507ms
+ GET /api/customers 200 in 524ms
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 70ms
+ GET /api/customers 200 in 40ms
+ ✓ Compiled /api/categories in 136ms (580 modules)
+ GET /api/categories 200 in 198ms
+ GET /api/categories 200 in 35ms
+ GET / 200 in 75ms
+ GET / 200 in 72ms
+ GET / 200 in 54ms
+ GET / 200 in 39ms
+ GET / 200 in 57ms
+ GET / 200 in 53ms
+ GET / 200 in 111ms
+ GET /api/products 200 in 49ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/products 200 in 69ms
+ GET / 200 in 103ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 53ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 56ms
+ GET /api/customers 200 in 38ms
+ GET /api/auth/session 200 in 35ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fpos 200 in 54ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fproducts 200 in 66ms
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 72ms
+ GET /api/customers 200 in 41ms
+ GET /api/categories 200 in 41ms
+ GET /api/auth/session 200 in 33ms
+ GET /offline 404 in 18ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fdashboard 200 in 37ms
+ GET /api/categories 200 in 29ms
+ GET /api/auth/session 200 in 40ms
+ GET / 200 in 41ms
+ GET / 200 in 39ms
+ GET / 200 in 43ms
+ GET / 200 in 50ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/products 200 in 58ms
+ GET /api/auth/session 200 in 76ms
+ GET / 200 in 93ms
+ GET /api/products 200 in 85ms
+ GET /api/customers 200 in 38ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 57ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 62ms
+ GET /api/auth/session 200 in 38ms
+ GET /api/customers 200 in 37ms
+ GET /api/categories 200 in 38ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fpos 200 in 51ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fproducts 200 in 55ms
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 52ms
+ GET /api/auth/session 200 in 35ms
+ GET /api/categories 200 in 34ms
+ GET /offline 404 in 29ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fdashboard 200 in 53ms
+ GET / 200 in 44ms
+ GET / 200 in 40ms
+ GET / 200 in 42ms
+ GET / 200 in 35ms
+ GET /api/products 200 in 49ms
+ GET /api/customers 200 in 29ms
+ GET /api/categories 200 in 28ms
+ GET / 200 in 36ms
+ GET / 200 in 43ms
+ GET / 200 in 43ms
+ GET / 200 in 38ms
+ GET / 200 in 51ms
+ GET /api/products 200 in 48ms
+ GET /api/customers 200 in 37ms
+ GET /api/categories 200 in 29ms
+ GET / 200 in 36ms
+ GET / 200 in 41ms
+ GET / 200 in 42ms
+ GET / 200 in 36ms
+ GET / 200 in 37ms
+ GET / 200 in 41ms
+ GET / 200 in 38ms
+ GET / 200 in 43ms
+ GET /api/products 200 in 48ms
+ GET /api/customers 200 in 33ms
+ GET /api/categories 200 in 35ms
+ GET / 200 in 36ms
+ GET / 200 in 40ms
+ GET / 200 in 44ms
+ GET / 200 in 40ms
+ GET / 200 in 39ms
+ GET / 200 in 36ms
+ GET / 200 in 39ms
+ GET /api/products 200 in 49ms
+ GET /api/customers 200 in 31ms
+ GET /api/categories 200 in 30ms
+ GET / 200 in 38ms
+ GET / 200 in 36ms
+ GET / 200 in 38ms
+ GET / 200 in 41ms
+ GET / 200 in 37ms
+ GET / 200 in 35ms
+ GET / 200 in 38ms
+ GET / 200 in 43ms
+ GET / 200 in 38ms
+ GET / 200 in 38ms
+ GET /api/products 200 in 49ms
+ GET /api/customers 200 in 34ms
+ GET /api/categories 200 in 29ms
+ GET / 200 in 36ms
+ GET / 200 in 36ms

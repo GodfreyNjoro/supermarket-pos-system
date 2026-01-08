@@ -1,0 +1,88 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 1942ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.1s (633 modules)
+ GET / 200 in 2533ms
+ ✓ Compiled in 398ms (324 modules)
+ GET / 200 in 46ms
+ GET / 200 in 38ms
+ GET / 200 in 49ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1018ms (750 modules)
+ GET / 200 in 919ms
+ GET /api/products 200 in 1400ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 105ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 95ms
+ GET /api/auth/session 200 in 1591ms
+ GET /api/auth/session 200 in 63ms
+ GET /?callbackUrl=https%3A%2F%2F247ac79fd.preview.abacusai.app%2Fproducts 200 in 93ms
+ GET /?callbackUrl=https%3A%2F%2F247ac79fd.preview.abacusai.app%2Fpos 200 in 94ms
+ ✓ Compiled /api/customers in 137ms (578 modules)
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 304ms
+ GET /api/customers 200 in 361ms
+ GET /api/products 200 in 49ms
+ ✓ Compiled /_not-found in 308ms (893 modules)
+ GET /offline 404 in 378ms
+ GET /?callbackUrl=https%3A%2F%2F247ac79fd.preview.abacusai.app%2Fdashboard 200 in 76ms
+ ✓ Compiled /api/categories in 159ms (581 modules)
+ GET /api/categories 200 in 254ms
+ GET /api/customers 200 in 43ms
+ GET /api/categories 200 in 31ms
+ GET / 200 in 63ms
+ GET / 200 in 47ms
+ GET /api/auth/providers 200 in 51ms
+ GET /api/auth/csrf 200 in 48ms
+ POST /api/auth/callback/credentials 200 in 152ms
+ GET /api/auth/session 200 in 46ms
+ ✓ Compiled /pos in 392ms (583 modules)
+ ✓ Compiled in 1997ms (861 modules)
+ GET /api/stores 200 in 2690ms
+ GET /api/categories 200 in 62ms
+ ✓ Compiled /api/auth/validate-session in 208ms (1174 modules)
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 426ms
+ GET /api/customers 200 in 454ms
+ POST /api/auth/validate-session 200 in 465ms
+ POST /api/auth/validate-session 200 in 460ms
+ GET /api/categories 200 in 53ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 32ms
+ GET /api/customers 200 in 30ms
+ GET /api/auth/csrf 200 in 69ms
+ POST /api/auth/signout 200 in 53ms
+ GET / 200 in 85ms
+ GET / 200 in 66ms
+ GET /api/products 200 in 45ms
+ GET /api/auth/session 200 in 59ms
+ GET / 200 in 45ms
+ GET /api/products 200 in 44ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/customers 200 in 32ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 69ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 80ms
+ GET /api/customers 200 in 42ms
+ GET /api/categories 200 in 48ms
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 45ms
+ GET /?callbackUrl=https%3A%2F%2F247ac79fd.preview.abacusai.app%2Fproducts 200 in 44ms
+ GET /?callbackUrl=https%3A%2F%2F247ac79fd.preview.abacusai.app%2Fpos 200 in 51ms
+ GET /api/categories 200 in 34ms
+ GET /?callbackUrl=https%3A%2F%2F247ac79fd.preview.abacusai.app%2Fdashboard 200 in 40ms
+ GET /offline 404 in 23ms
+ GET / 200 in 41ms
+ GET / 200 in 41ms
+ GET / 200 in 48ms
+ GET / 200 in 62ms
+ GET / 200 in 39ms
+ GET / 200 in 38ms
+ GET / 200 in 43ms
+ GET / 200 in 45ms
+ ✓ Compiled in 672ms (1180 modules)
+ ✓ Compiled in 366ms (873 modules)
+ ✓ Compiled in 286ms (873 modules)
+ ✓ Compiled in 307ms (873 modules)
+ ✓ Compiled in 252ms (873 modules)
+[?25h

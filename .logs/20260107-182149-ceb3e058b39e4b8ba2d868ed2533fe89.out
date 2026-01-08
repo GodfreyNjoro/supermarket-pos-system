@@ -1,0 +1,292 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 1771ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1627ms (633 modules)
+ GET / 200 in 1977ms
+ ✓ Compiled in 396ms (324 modules)
+ ✓ Compiled /api/auth/[...nextauth] in 466ms (550 modules)
+ GET /api/auth/providers 200 in 903ms
+ GET / 200 in 77ms
+ ✓ Compiled /middleware in 456ms (750 modules)
+ GET /api/auth/session 200 in 549ms
+ GET / 200 in 641ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 37ms
+ GET /api/products 200 in 729ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 53ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fproducts 200 in 56ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 508ms (893 modules)
+ GET /api/products 200 in 578ms
+ GET /offline 404 in 526ms
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 603ms
+ GET /api/customers 200 in 648ms
+ GET /?callbackUrl=https%3A%2F%2F9e2a0162a.preview.abacusai.app%2Fpos 200 in 654ms
+ GET /api/customers 200 in 34ms
+ ✓ Compiled /api/categories in 133ms (581 modules)
+ GET /api/categories 200 in 184ms
+ GET /api/categories 200 in 30ms
+ GET /api/auth/csrf 200 in 42ms
+ ✓ Compiled /api/signup in 175ms (583 modules)
+ POST /api/signup 201 in 303ms
+ GET / 200 in 43ms
+ GET /api/auth/signin 302 in 43ms
+ GET /?callbackUrl=https://9e2a0162a.preview.abacusai.app 200 in 34ms
+ GET /api/auth/csrf 200 in 25ms
+ POST /api/auth/callback/credentials 302 in 102ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1208ms (2283 modules)
+ GET /dashboard 200 in 1443ms
+ GET / 200 in 43ms
+ GET /dashboard 200 in 46ms
+ GET /api/products 200 in 50ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/products 200 in 62ms
+ GET / 200 in 123ms
+ ○ Compiling /api/stores ...
+ ✓ Compiled /api/stores in 2.4s (3242 modules)
+ GET /api/customers 200 in 2474ms
+ GET /api/products 200 in 2528ms
+ GET /api/auth/session 200 in 2738ms
+ GET /api/stores 200 in 2747ms
+ GET /products 200 in 2785ms
+ GET /dashboard 200 in 2488ms
+ GET /pos 200 in 2787ms
+ GET /api/customers 200 in 226ms
+ GET /api/categories 200 in 119ms
+ GET /api/products 200 in 60ms
+ GET /offline 404 in 53ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/stores 200 in 84ms
+ GET /api/customers 200 in 64ms
+ GET /api/categories 200 in 57ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/stores 200 in 69ms
+ GET /api/categories 200 in 69ms
+ GET /api/customers 200 in 73ms
+ GET /api/auth/session 200 in 47ms
+ GET /api/stores 200 in 55ms
+ ✓ Compiled /api/sales/stats in 355ms (1782 modules)
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 584ms
+ GET /api/customers 200 in 593ms
+ GET /api/categories 200 in 813ms
+ GET /api/auth/session 200 in 874ms
+ GET /api/sales/stats?period=today&storeId=cmk31myec0000shvdauq3yfvh 200 in 937ms
+ GET /api/stores 200 in 867ms
+ GET /api/categories 200 in 45ms
+ GET /api/customers 200 in 61ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 64ms
+ GET /api/stores 200 in 65ms
+ GET /api/categories 200 in 44ms
+ GET /api/sales/stats?period=today&storeId=cmk31myec0000shvdauq3yfvh 200 in 78ms
+ GET /api/sales/stats?period=today&storeId=cmk31myec0000shvdauq3yfvh 200 in 61ms
+ GET /api/sales/stats?period=today&storeId=cmk31myec0000shvdauq3yfvh 200 in 33ms
+ ○ Compiling /customers ...
+ ✓ Compiled /customers in 2.1s (3348 modules)
+ GET /pos 200 in 2408ms
+ GET /inventory 200 in 2444ms
+ GET /returns 200 in 2408ms
+ GET /suppliers 200 in 2450ms
+ GET /users 200 in 2443ms
+ GET /customers 200 in 2396ms
+ GET /sales 200 in 2411ms
+ GET /reports 200 in 2411ms
+ GET /products 200 in 2412ms
+ ○ Compiling /api/inventory/low-stock ...
+ ✓ Compiled /api/inventory/low-stock in 698ms (1844 modules)
+ ✓ Compiled (1854 modules)
+ GET /api/products 200 in 1223ms
+ GET /api/customers 200 in 1287ms
+ GET /api/returns 200 in 1332ms
+ GET /api/auth/session 200 in 1358ms
+ GET /api/stores 200 in 1409ms
+ GET /api/users 200 in 1453ms
+ GET /api/suppliers 200 in 1440ms
+ GET /api/inventory/adjustments 200 in 1451ms
+ GET /api/inventory/transfers 200 in 1452ms
+ GET /api/sales/stats?period=month 200 in 1173ms
+ GET /api/inventory/low-stock 200 in 1456ms
+ GET /products 200 in 1283ms
+ GET /pos 200 in 1284ms
+ GET / 200 in 1406ms
+ GET /api/products 200 in 171ms
+ GET /api/customers 200 in 158ms
+ GET /api/returns 200 in 159ms
+ GET /api/users 200 in 119ms
+ GET /api/stores 200 in 120ms
+ GET /api/suppliers 200 in 131ms
+ GET /api/auth/session 200 in 164ms
+ GET /offline 404 in 124ms
+ GET /api/inventory/adjustments 200 in 166ms
+ GET /api/inventory/low-stock 200 in 166ms
+ GET /api/inventory/transfers 200 in 171ms
+ GET /api/sales/stats?period=month 200 in 173ms
+ GET /api/products 200 in 145ms
+ GET /api/customers 200 in 146ms
+ GET /api/stores 200 in 114ms
+ GET /dashboard 200 in 126ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/products 200 in 56ms
+ GET /api/customers 200 in 71ms
+ GET /api/categories 200 in 91ms
+ GET /api/stores 200 in 93ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/products 200 in 86ms
+ GET /api/customers 200 in 83ms
+ GET /api/categories 200 in 68ms
+ GET /api/stores 200 in 71ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/products 200 in 96ms
+ GET /api/customers 200 in 87ms
+ GET /api/stores 200 in 95ms
+ GET /api/categories 200 in 76ms
+ GET /api/auth/session 200 in 221ms
+ GET /api/products 200 in 268ms
+ GET /api/customers 200 in 271ms
+ GET /api/categories 200 in 186ms
+ GET /api/stores 200 in 344ms
+ GET /api/auth/session 200 in 230ms
+ GET /api/products 200 in 214ms
+ GET /api/customers 200 in 192ms
+ GET /api/stores 200 in 83ms
+ GET /api/categories 200 in 84ms
+ GET /api/auth/session 200 in 62ms
+ GET /api/products 200 in 68ms
+ GET /api/customers 200 in 60ms
+ GET /api/categories 200 in 51ms
+ GET /api/stores 200 in 59ms
+ GET /api/auth/session 200 in 50ms
+ GET /api/products 200 in 57ms
+ GET /api/customers 200 in 50ms
+ GET /api/categories 200 in 64ms
+ GET /api/stores 200 in 80ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/products 200 in 81ms
+ GET /api/customers 200 in 74ms
+ GET /api/categories 200 in 57ms
+ GET /api/stores 200 in 71ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/customers 200 in 119ms
+ GET /api/products 200 in 151ms
+ GET /api/categories 200 in 153ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 111ms
+ GET /api/stores 200 in 116ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/customers 200 in 76ms
+ GET /api/products 200 in 101ms
+ GET /api/categories 200 in 90ms
+ GET /api/stores 200 in 124ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 116ms
+ GET /api/customers 200 in 118ms
+ GET /api/auth/session 200 in 132ms
+ GET /api/products 200 in 101ms
+ GET /api/categories 200 in 92ms
+ GET /api/stores 200 in 82ms
+ GET /api/inventory/low-stock?storeId=cmk31myec0000shvdauq3yfvh 200 in 104ms
+ GET /api/inventory/adjustments?storeId=cmk31myec0000shvdauq3yfvh 200 in 107ms
+ GET /api/inventory/transfers?storeId=cmk31myec0000shvdauq3yfvh 200 in 117ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 98ms
+ GET /api/products 200 in 79ms
+ GET /api/customers 200 in 100ms
+ GET /api/auth/session 200 in 138ms
+ GET /api/categories 200 in 126ms
+ GET /api/stores 200 in 124ms
+ GET /api/inventory/adjustments?storeId=cmk31myec0000shvdauq3yfvh 200 in 113ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 95ms
+ GET /api/inventory/transfers?storeId=cmk31myec0000shvdauq3yfvh 200 in 114ms
+ GET /api/inventory/low-stock?storeId=cmk31myec0000shvdauq3yfvh 200 in 116ms
+ GET /api/customers 200 in 93ms
+ GET /api/products 200 in 105ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/categories 200 in 90ms
+ GET /api/stores 200 in 82ms
+ GET /api/customers 200 in 68ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/products 200 in 91ms
+ GET /api/stores 200 in 99ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 145ms
+ GET /api/auth/session 200 in 143ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 145ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 139ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 136ms
+ GET /api/auth/session 200 in 136ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 120ms
+ GET /api/customers 200 in 146ms
+ GET /api/stores 200 in 128ms
+ GET /api/stores 200 in 53ms
+ GET /api/stores 200 in 55ms
+ GET /api/inventory/transfers?storeId=cmk31myec0000shvdauq3yfvh 200 in 61ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 65ms
+ GET /api/inventory/adjustments?storeId=cmk31myec0000shvdauq3yfvh 200 in 67ms
+ GET /api/inventory/low-stock?storeId=cmk31myec0000shvdauq3yfvh 200 in 68ms
+ GET /api/stores 200 in 24ms
+ GET /api/stores 200 in 36ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 51ms
+ GET /api/categories 200 in 52ms
+ GET /api/customers 200 in 55ms
+ GET /api/stores 200 in 31ms
+ GET /api/stores 200 in 27ms
+ GET /api/stores 200 in 27ms
+ GET /api/stores 200 in 31ms
+ GET /api/stores 200 in 31ms
+ GET /api/stores 200 in 27ms
+ GET /api/stores 200 in 60ms
+ GET /api/inventory/low-stock?storeId=cmk31myec0000shvdauq3yfvh 200 in 121ms
+ GET /api/categories 200 in 121ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 124ms
+ GET /api/customers 200 in 124ms
+ GET /api/inventory/adjustments?storeId=cmk31myec0000shvdauq3yfvh 200 in 130ms
+ GET /api/inventory/transfers?storeId=cmk31myec0000shvdauq3yfvh 200 in 129ms
+ GET /api/stores 200 in 61ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 28ms
+ GET /api/stores 200 in 36ms
+ GET /api/customers 200 in 41ms
+ GET /api/categories 200 in 47ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 38ms
+ GET /api/stores 200 in 27ms
+ GET /api/stores 200 in 43ms
+ GET /api/inventory/adjustments?storeId=cmk31myec0000shvdauq3yfvh 200 in 49ms
+ GET /api/inventory/transfers?storeId=cmk31myec0000shvdauq3yfvh 200 in 58ms
+ GET /api/inventory/low-stock?storeId=cmk31myec0000shvdauq3yfvh 200 in 57ms
+ GET /api/products?storeId=cmk31myec0000shvdauq3yfvh 200 in 61ms
+ GET /api/stores 200 in 25ms
+ GET /api/stores 200 in 27ms
+ GET /api/stores 200 in 30ms
+ ○ Compiling /returns/new ...
+ ✓ Compiled /returns/new in 931ms (3371 modules)
+ GET /returns/new 200 in 1008ms
+ GET /api/products 200 in 39ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/customers 200 in 71ms
+ GET /api/products 200 in 73ms
+ GET / 200 in 92ms
+ GET /api/auth/session 200 in 114ms
+ GET /products 200 in 135ms
+ GET /pos 200 in 135ms
+ GET /api/stores 200 in 115ms
+ GET /api/categories 200 in 76ms
+ GET /api/customers 200 in 79ms
+ GET /offline 404 in 34ms
+ GET /dashboard 200 in 83ms
+ GET /api/stores 200 in 61ms
+ GET /api/categories 200 in 32ms
+[?25h

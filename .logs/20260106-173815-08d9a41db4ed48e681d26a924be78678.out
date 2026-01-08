@@ -1,0 +1,153 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 1906ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.5s (636 modules)
+ GET / 200 in 2893ms
+ ✓ Compiled in 395ms (322 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 717ms (548 modules)
+ GET /api/auth/providers 200 in 1190ms
+ GET / 200 in 68ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 607ms (748 modules)
+ GET /api/auth/session 200 in 696ms
+ GET / 200 in 788ms
+ GET /api/auth/signin?callbackUrl=%2Fproducts 302 in 37ms
+ GET /api/auth/signin?callbackUrl=%2Fpos 302 in 36ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/products 200 in 873ms
+ GET /api/products 200 in 62ms
+ GET /?callbackUrl=https%3A%2F%2F6dd0e2b0b.preview.abacusai.app%2Fpos 200 in 68ms
+ GET /?callbackUrl=https%3A%2F%2F6dd0e2b0b.preview.abacusai.app%2Fproducts 200 in 67ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 539ms (889 modules)
+ GET /api/auth/signin?callbackUrl=%2Fdashboard 302 in 609ms
+ GET /api/customers 200 in 679ms
+ GET /offline 404 in 594ms
+ GET /?callbackUrl=https%3A%2F%2F6dd0e2b0b.preview.abacusai.app%2Fdashboard 200 in 72ms
+ ✓ Compiled /api/categories in 180ms (579 modules)
+ GET /api/customers 200 in 376ms
+ GET /api/categories 200 in 398ms
+ GET /api/categories 200 in 29ms
+ GET /api/auth/csrf 200 in 46ms
+ ✓ Compiled /api/signup in 156ms (581 modules)
+ POST /api/signup 201 in 286ms
+ GET / 200 in 45ms
+ GET /api/auth/signin 302 in 46ms
+ GET /?callbackUrl=https://6dd0e2b0b.preview.abacusai.app 200 in 32ms
+ GET /api/auth/csrf 200 in 23ms
+ POST /api/auth/callback/credentials 302 in 101ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 2.1s (2133 modules)
+ GET /dashboard 200 in 2433ms
+ GET / 200 in 122ms
+ GET /dashboard 200 in 82ms
+ GET /api/products 200 in 85ms
+ GET /api/auth/session 200 in 163ms
+ GET / 200 in 261ms
+ ✓ Compiled /products in 490ms (1204 modules)
+ ✓ Compiled in 2.2s (1181 modules)
+ GET /api/customers 200 in 2984ms
+ GET /api/products 200 in 3023ms
+ GET /api/auth/session 200 in 3209ms
+ GET /api/sales/stats?period=today 200 in 3325ms
+ GET /pos 200 in 3341ms
+ GET /products 200 in 3340ms
+ GET /dashboard 200 in 3189ms
+ GET /api/categories 200 in 378ms
+ GET /api/customers 200 in 154ms
+ GET /api/products 200 in 143ms
+ GET /api/auth/session 200 in 157ms
+ GET /api/sales/stats?period=today 200 in 217ms
+ GET /offline 404 in 243ms
+ GET /api/categories 200 in 855ms
+ GET /api/products 200 in 882ms
+ GET /api/customers 200 in 838ms
+ GET /api/auth/session 200 in 863ms
+ GET /api/auth/session 200 in 187ms
+ GET /api/sales/stats?period=today 200 in 265ms
+ GET /api/sales/stats?period=today 200 in 83ms
+ ○ Compiling /reports ...
+ ✓ Compiled /reports in 2.2s (2688 modules)
+ GET /products 200 in 2581ms
+ GET /pos 200 in 2607ms
+ GET /customers 200 in 2664ms
+ GET /sales 200 in 2664ms
+ GET /returns 200 in 2642ms
+ GET /reports 200 in 2643ms
+ GET /api/products 200 in 112ms
+ GET /api/customers 200 in 137ms
+ GET /api/auth/session 200 in 196ms
+ GET /api/sales/stats?period=month 200 in 252ms
+ ○ Compiling /api/returns ...
+ ✓ Compiled /api/returns in 1155ms (1489 modules)
+ ✓ Compiled (1491 modules)
+ GET /api/products? 200 in 2087ms
+ GET /api/categories 200 in 2089ms
+ GET /api/products 200 in 2077ms
+ GET /api/customers 200 in 2205ms
+ GET /api/sales?limit=50 200 in 2314ms
+ GET /api/auth/session 200 in 2166ms
+ GET /api/returns 200 in 2371ms
+ GET /api/sales/stats?period=month 200 in 2189ms
+ GET / 200 in 2455ms
+ GET /pos 200 in 2282ms
+ GET /products 200 in 2284ms
+ GET /api/categories 200 in 378ms
+ GET /api/products? 200 in 419ms
+ GET /api/products 200 in 409ms
+ GET /api/customers 200 in 193ms
+ GET /api/sales?limit=50 200 in 223ms
+ GET /api/returns 200 in 212ms
+ GET /api/auth/session 200 in 238ms
+ GET /offline 404 in 169ms
+ GET /api/products? 200 in 184ms
+ GET /api/products 200 in 184ms
+ GET /api/customers 200 in 186ms
+ GET /dashboard 200 in 219ms
+ GET /api/auth/session 200 in 284ms
+ GET /api/products? 200 in 253ms
+ GET /api/products 200 in 251ms
+ GET /api/customers 200 in 260ms
+ GET /api/auth/session 200 in 214ms
+ GET /api/products 200 in 196ms
+ GET /api/customers 200 in 184ms
+ GET /api/categories 200 in 171ms
+ GET /api/auth/session 200 in 137ms
+ GET /api/products 200 in 173ms
+ GET /api/categories 200 in 148ms
+ GET /api/auth/session 200 in 168ms
+ GET /api/products 200 in 174ms
+ GET /api/customers 200 in 179ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/products 200 in 142ms
+ GET /api/customers 200 in 135ms
+ GET /api/categories 200 in 153ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/products 200 in 94ms
+ GET /api/customers 200 in 150ms
+ GET /api/products 200 in 139ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/customers 200 in 132ms
+ GET /api/categories 200 in 186ms
+ GET /api/products 200 in 201ms
+ GET /api/auth/session 200 in 190ms
+ GET /api/products 200 in 192ms
+ GET /api/categories 200 in 99ms
+ GET /api/auth/session 200 in 145ms
+ GET /api/products 200 in 222ms
+ GET /api/categories 200 in 209ms
+ GET /api/customers 200 in 241ms
+ GET /api/auth/session 200 in 280ms
+ GET /api/auth/session 200 in 230ms
+ GET /api/auth/session 200 in 52ms
+ GET /api/auth/session 200 in 26ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 68ms
+[?25h
