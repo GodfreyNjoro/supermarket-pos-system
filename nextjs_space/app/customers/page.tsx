@@ -3,6 +3,7 @@
 import { SessionGuard } from '@/components/session-guard';
 import { RoleGuard } from '@/components/role-guard';
 import { Navigation } from '@/components/navigation';
+import { PageWrapper } from '@/components/page-wrapper';
 import { useEffect, useState } from 'react';
 import { Plus, User } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
@@ -66,7 +67,8 @@ export default function CustomersPage() {
         <Toaster position="top-right" />
         <div className="min-h-screen bg-gray-50">
           <Navigation />
-          <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <PageWrapper>
+            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-8 flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
@@ -116,7 +118,8 @@ export default function CustomersPage() {
                 <p className="mt-2 text-gray-500">Get started by adding your first customer</p>
               </div>
             )}
-          </main>
+          </div>
+          </PageWrapper>
         </div>
 
         {showModal && (

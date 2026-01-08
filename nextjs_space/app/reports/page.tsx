@@ -3,6 +3,7 @@
 import { SessionGuard } from '@/components/session-guard';
 import { RoleGuard } from '@/components/role-guard';
 import { Navigation } from '@/components/navigation';
+import { PageWrapper } from '@/components/page-wrapper';
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DollarSign, TrendingUp, Package } from 'lucide-react';
@@ -38,7 +39,8 @@ export default function ReportsPage() {
       <RoleGuard allowedRoles={['ADMIN']}>
         <div className="min-h-screen bg-gray-50">
           <Navigation />
-          <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <PageWrapper>
+            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900">Sales Reports</h1>
               <p className="mt-2 text-gray-600">Analyze business performance</p>
@@ -194,7 +196,8 @@ export default function ReportsPage() {
                 </div>
               </>
             )}
-          </main>
+          </div>
+          </PageWrapper>
         </div>
       </RoleGuard>
     </SessionGuard>

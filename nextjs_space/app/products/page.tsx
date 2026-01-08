@@ -3,6 +3,7 @@
 import { SessionGuard } from '@/components/session-guard';
 import { RoleGuard } from '@/components/role-guard';
 import { Navigation } from '@/components/navigation';
+import { PageWrapper } from '@/components/page-wrapper';
 import { useEffect, useState } from 'react';
 import { Plus, Edit, Trash2, Package, AlertTriangle, Printer, FileSpreadsheet } from 'lucide-react';
 import Link from 'next/link';
@@ -96,7 +97,8 @@ export default function ProductsPage() {
         <Toaster position="top-right" />
         <div className="min-h-screen bg-gray-50">
           <Navigation />
-          <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <PageWrapper>
+            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col items-start justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Products</h1>
@@ -265,7 +267,8 @@ export default function ProductsPage() {
                 </Link>
               </div>
             )}
-          </main>
+          </div>
+          </PageWrapper>
         </div>
       </RoleGuard>
     </SessionGuard>

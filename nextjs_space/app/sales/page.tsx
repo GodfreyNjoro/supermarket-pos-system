@@ -2,6 +2,7 @@
 
 import { SessionGuard } from '@/components/session-guard';
 import { Navigation } from '@/components/navigation';
+import { PageWrapper } from '@/components/page-wrapper';
 import { useEffect, useState } from 'react';
 import { Receipt, CreditCard, Banknote, User } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
@@ -42,7 +43,8 @@ export default function SalesPage() {
       <Toaster position="top-right" />
       <div className="min-h-screen bg-gray-50">
         <Navigation />
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <PageWrapper>
+            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Sales History</h1>
             <p className="mt-2 text-gray-600">View all transactions</p>
@@ -123,7 +125,8 @@ export default function SalesPage() {
               <p className="mt-2 text-gray-500">Sales will appear here</p>
             </div>
           )}
-        </main>
+        </div>
+          </PageWrapper>
       </div>
     </SessionGuard>
   );
