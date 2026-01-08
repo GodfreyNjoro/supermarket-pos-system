@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
     // Filter low stock items
     const lowStock = products
-      .filter(p => p.stock <= p.reorderLevel)
+      .filter((p: { stock: number; reorderLevel: number }) => p.stock <= p.reorderLevel)
       .slice(0, 50);
 
     return NextResponse.json(lowStock);
