@@ -102,9 +102,10 @@ export default function SuppliersPage() {
 
   return (
     <SessionGuard>
-      <div className="flex h-screen flex-col overflow-hidden">
+      <div className="min-h-screen bg-gray-50">
         <Navigation />
-        <div className="flex-1 overflow-auto p-4">
+        <PageWrapper>
+          <div className="p-4">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h1 className="text-xl font-bold">Suppliers</h1>
@@ -221,7 +222,8 @@ export default function SuppliersPage() {
           </Table>
         </CardContent>
       </Card>
-        </div>
+          </div>
+        </PageWrapper>
       </div>
     </SessionGuard>
   );

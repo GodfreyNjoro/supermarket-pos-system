@@ -2,6 +2,7 @@
 
 import { SessionGuard } from '@/components/session-guard';
 import { Navigation } from '@/components/navigation';
+import { PageWrapper } from '@/components/page-wrapper';
 import { useState, useEffect, useRef } from 'react';
 import {
   Search,
@@ -452,7 +453,8 @@ export default function POSPage() {
     <SessionGuard>
       <div className="min-h-screen bg-gray-50">
         <Navigation />
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <PageWrapper>
+          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900">Point of Sale</h1>
             <p className="mt-2 text-gray-600">Scan products and process transactions</p>
@@ -821,7 +823,8 @@ export default function POSPage() {
               </div>
             </div>
           </div>
-        </main>
+          </div>
+        </PageWrapper>
       </div>
 
       {showPaymentModal && !showReceipt && (
