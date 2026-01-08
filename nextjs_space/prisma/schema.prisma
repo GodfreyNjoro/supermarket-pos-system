@@ -378,3 +378,28 @@ model StockTransferItem {
   
   @@index([transferId])
 }
+
+// Sync tracking for multi-location offline support
+model SyncLog {
+  id            String    @id @default(cuid())
+  entityType    String    // Product, Sale, StockAdjustment, etc.
+  entityId      String    // ID of the changed entity
+  action        String    // CREATE, UPDATE, DELETE
+  data          Json      // Snapshot of the entity at time of change
+  storeId       String    // Origin store
+  syncedAt      DateTime? // When synced to cloud (null = pending)
+  createdAt     DateTime  @default(now())
+  
+  @@index([storeId])
+  @@index([syncedAt])
+  @@index([entityType, entityId])
+}
+
+model SyncStatus {
+  id            String    @id @default(cuid())
+  storeId       String    @unique
+  lastSyncAt    DateTime?
+  pendingCount  Int       @default(0)
+  lastError     String?
+  updatedAt     DateTime  @updatedAt
+}

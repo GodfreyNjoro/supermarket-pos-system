@@ -331,6 +331,51 @@ export default function DatabaseSettingsPage() {
                 </Card>
               )}
 
+              {/* Cloud Sync Status */}
+              {useLocalDb && isElectron && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Cloud className="h-5 w-5" />
+                      Cloud Sync
+                    </CardTitle>
+                    <CardDescription>
+                      Synchronize local data with the central cloud server
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                      <div>
+                        <p className="font-medium">Sync Status</p>
+                        <p className="text-sm text-muted-foreground">
+                          {cloudStatus?.connected ? 'Cloud connected' : 'Cloud offline'}
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={async () => {
+                          toast.info('Sync started...');
+                          try {
+                            await (window as any).electronAPI.triggerSync();
+                            toast.success('Sync completed!');
+                          } catch {
+                            toast.error('Sync failed');
+                          }
+                        }}
+                        disabled={!cloudStatus?.connected}
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        Sync Now
+                      </Button>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      When online, local changes will automatically sync to the cloud server.
+                      Changes from other locations will be pulled down to your local database.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Setup Instructions */}
               <Card>
                 <CardHeader>
