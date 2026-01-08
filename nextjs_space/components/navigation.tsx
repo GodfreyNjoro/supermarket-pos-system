@@ -19,8 +19,10 @@ import {
   History,
   ChevronDown,
   ChevronRight,
+  Pin,
+  PinOff,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
 import { StoreSelector } from '@/components/store-selector';
 import { CurrencySelector } from '@/components/currency-selector';
@@ -32,6 +34,24 @@ export function Navigation() {
   const [inventoryExpanded, setInventoryExpanded] = useState(
     pathname?.startsWith('/inventory') || pathname?.startsWith('/suppliers')
   );
+  const [isPinned, setIsPinned] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Load pinned state from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('sidebar-pinned');
+    if (saved !== null) {
+      setIsPinned(saved === 'true');
+    }
+  }, []);
+
+  const togglePin = () => {
+    const newPinned = !isPinned;
+    setIsPinned(newPinned);
+    localStorage.setItem('sidebar-pinned', String(newPinned));
+  };
+
+  const sidebarVisible = isPinned || isHovered;
 
   const userRole = (session?.user as any)?.role;
   const isAdmin = userRole === 'ADMIN';
@@ -137,10 +157,24 @@ export function Navigation() {
       </header>
 
       {/* Left Sidebar */}
-      <aside className={`fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] w-64 border-r border-gray-200 bg-white transition-transform lg:translate-x-0 ${
-        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
-        <nav className="h-full overflow-y-auto px-3 py-4">
+      <aside 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] border-r border-gray-200 bg-white transition-all duration-300 ${
+          mobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'
+        } ${sidebarVisible ? 'w-64' : 'w-16'}`}
+      >
+        {/* Pin/Unpin Button */}
+        <div className="hidden lg:flex items-center justify-end px-3 pt-3">
+          <button
+            onClick={togglePin}
+            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+            title={isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
+          >
+            {isPinned ? <Pin className="h-4 w-4" /> : <PinOff className="h-4 w-4" />}
+          </button>
+        </div>
+        <nav className={`h-full overflow-y-auto px-3 ${sidebarVisible ? 'py-2' : 'py-4'}`}>
           <ul className="space-y-1">
             {filteredNavigation.map((item) => {
               const isActive = pathname === item.href;
@@ -148,11 +182,12 @@ export function Navigation() {
               return (
                 <li key={item.name}>
                   <Link href={item.href} onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center space-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                    title={!sidebarVisible ? item.name : undefined}
+                    className={`flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                       isActive ? 'bg-emerald-100 text-emerald-700' : 'text-gray-700 hover:bg-gray-100'
-                    }`}>
-                    <Icon className="h-5 w-5" />
-                    <span>{item.name}</span>
+                    } ${sidebarVisible ? 'space-x-3' : 'justify-center'}`}>
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    {sidebarVisible && <span>{item.name}</span>}
                   </Link>
                 </li>
               );
@@ -161,35 +196,47 @@ export function Navigation() {
             {/* Inventory section with submenu */}
             {isInventoryOrAbove && (
               <li>
-                <button onClick={() => setInventoryExpanded(!inventoryExpanded)}
-                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                    pathname?.startsWith('/inventory') || pathname?.startsWith('/suppliers')
-                      ? 'bg-emerald-50 text-emerald-700' : 'text-gray-700 hover:bg-gray-100'
-                  }`}>
-                  <div className="flex items-center space-x-3">
+                {sidebarVisible ? (
+                  <>
+                    <button onClick={() => setInventoryExpanded(!inventoryExpanded)}
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                        pathname?.startsWith('/inventory') || pathname?.startsWith('/suppliers')
+                          ? 'bg-emerald-50 text-emerald-700' : 'text-gray-700 hover:bg-gray-100'
+                      }`}>
+                      <div className="flex items-center space-x-3">
+                        <Boxes className="h-5 w-5" />
+                        <span>Inventory</span>
+                      </div>
+                      {inventoryExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                    </button>
+                    {inventoryExpanded && (
+                      <ul className="mt-1 ml-4 space-y-1 border-l border-gray-200 pl-4">
+                        {inventorySubMenu.map((sub) => {
+                          const isActive = pathname === sub.href;
+                          const Icon = sub.icon;
+                          return (
+                            <li key={sub.name}>
+                              <Link href={sub.href} onClick={() => setMobileMenuOpen(false)}
+                                className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                                  isActive ? 'bg-emerald-100 text-emerald-700' : 'text-gray-600 hover:bg-gray-100'
+                                }`}>
+                                <Icon className="h-4 w-4" />
+                                <span>{sub.name}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link href="/inventory" title="Inventory"
+                    className={`flex items-center justify-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                      pathname?.startsWith('/inventory') || pathname?.startsWith('/suppliers')
+                        ? 'bg-emerald-100 text-emerald-700' : 'text-gray-700 hover:bg-gray-100'
+                    }`}>
                     <Boxes className="h-5 w-5" />
-                    <span>Inventory</span>
-                  </div>
-                  {inventoryExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                </button>
-                {inventoryExpanded && (
-                  <ul className="mt-1 ml-4 space-y-1 border-l border-gray-200 pl-4">
-                    {inventorySubMenu.map((sub) => {
-                      const isActive = pathname === sub.href;
-                      const Icon = sub.icon;
-                      return (
-                        <li key={sub.name}>
-                          <Link href={sub.href} onClick={() => setMobileMenuOpen(false)}
-                            className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                              isActive ? 'bg-emerald-100 text-emerald-700' : 'text-gray-600 hover:bg-gray-100'
-                            }`}>
-                            <Icon className="h-4 w-4" />
-                            <span>{sub.name}</span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  </Link>
                 )}
               </li>
             )}
