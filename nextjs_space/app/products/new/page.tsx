@@ -144,10 +144,10 @@ export default function NewProductPage() {
         throw new Error('Failed to upload file');
       }
 
-      // Get the public URL
-      const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || 'your-bucket';
-      const region = process.env.NEXT_PUBLIC_AWS_REGION || 'us-east-1';
-      const imageUrl = `https://d2908q01vomqb2.cloudfront.net/e1822db470e60d090affd0956d743cb0e7cdf113/2024/03/20/1_architecture.png`;
+      // Get the file URL from the API
+      const urlRes = await fetch(`/api/products/upload?cloud_storage_path=${encodeURIComponent(cloud_storage_path)}&isPublic=true`);
+      const urlData = await urlRes.json();
+      const imageUrl = urlData.url;
 
       setFormData(prev => ({
         ...prev,
