@@ -68,8 +68,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       include: { items: true }
     });
 
-    const allReceived = updatedOrder?.items.every(i => i.receivedQuantity >= i.orderedQuantity);
-    const someReceived = updatedOrder?.items.some(i => i.receivedQuantity > 0);
+    const allReceived = updatedOrder?.items.every((i: typeof updatedOrder.items[0]) => i.receivedQuantity >= i.orderedQuantity);
+    const someReceived = updatedOrder?.items.some((i: typeof updatedOrder.items[0]) => i.receivedQuantity > 0);
 
     const newStatus = allReceived ? 'RECEIVED' : someReceived ? 'PARTIAL' : 'SENT';
 
