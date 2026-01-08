@@ -37,8 +37,8 @@ async function verifyBarcodeSetup() {
     console.log('Barcode          | Product Name         | Price   | Stock');
     console.log('-'.repeat(60));
     
-    generatedBarcodes.forEach(barcode => {
-      const product = products.find(p => p.barcode === barcode);
+    generatedBarcodes.forEach((barcode: string) => {
+      const product = products.find((p: any) => p.barcode === barcode);
       if (product) {
         const name = product.name.padEnd(20);
         const price = `$${product.price.toFixed(2)}`.padEnd(8);
@@ -53,7 +53,7 @@ async function verifyBarcodeSetup() {
     console.log('Barcode          | Product Name              | Price');
     console.log('-'.repeat(60));
     
-    products.forEach(p => {
+    products.forEach((p: any) => {
       const name = p.name.padEnd(25);
       const price = `$${p.price.toFixed(2)}`;
       console.log(`${p.barcode} | ${name} | ${price}`);
@@ -63,14 +63,14 @@ async function verifyBarcodeSetup() {
     console.log('\n' + '='.repeat(60));
     console.log('\n🔧 DIAGNOSTICS:\n');
     
-    const productsWithoutBarcode = products.filter(p => !p.barcode || p.barcode.trim() === '');
-    const duplicateBarcodes = products.filter((p, i, arr) => 
-      arr.findIndex(p2 => p2.barcode === p.barcode) !== i
+    const productsWithoutBarcode = products.filter((p: any) => !p.barcode || p.barcode.trim() === '');
+    const duplicateBarcodes = products.filter((p: any, i: number, arr: any[]) => 
+      arr.findIndex((p2: any) => p2.barcode === p.barcode) !== i
     );
     
     if (productsWithoutBarcode.length > 0) {
       console.log(`❌ ${productsWithoutBarcode.length} products missing barcodes:`);
-      productsWithoutBarcode.forEach(p => console.log(`   - ${p.name}`));
+      productsWithoutBarcode.forEach((p: any) => console.log(`   - ${p.name}`));
     } else {
       console.log('✅ All products have barcodes');
     }
@@ -82,14 +82,14 @@ async function verifyBarcodeSetup() {
     }
     
     // Check barcode format
-    const invalidBarcodes = products.filter(p => {
+    const invalidBarcodes = products.filter((p: any) => {
       const barcode = p.barcode;
       return !barcode || barcode.length !== 13 || !/^\d+$/.test(barcode);
     });
     
     if (invalidBarcodes.length > 0) {
       console.log(`⚠️  ${invalidBarcodes.length} products with invalid barcode format:`);
-      invalidBarcodes.forEach(p => console.log(`   - ${p.name}: "${p.barcode}"`));
+      invalidBarcodes.forEach((p: any) => console.log(`   - ${p.name}: "${p.barcode}"`));
     } else {
       console.log('✅ All barcodes are valid EAN-13 format (13 digits)');
     }

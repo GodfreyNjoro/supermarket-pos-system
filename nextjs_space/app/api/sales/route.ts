@@ -106,7 +106,7 @@ export async function POST(request: Request) {
     const receiptNumber = `REC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     // Create sale and update inventory in a transaction
-    const sale = await prisma.$transaction(async (tx) => {
+    const sale = await prisma.$transaction(async (tx: Omit<typeof prisma, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>) => {
       // Create the sale
       const newSale = await tx.sale.create({
         data: {

@@ -437,13 +437,13 @@ async function main() {
   const sampleSales = [];
   for (let i = 0; i < 15; i++) {
     const saleProducts = downtownProducts.slice(0, Math.floor(Math.random() * 4) + 1);
-    const items = saleProducts.map(p => ({
+    const items = saleProducts.map((p: any) => ({
       productId: p.id,
       quantity: Math.floor(Math.random() * 3) + 1,
       unitPrice: p.price,
       subtotal: p.price * (Math.floor(Math.random() * 3) + 1)
     }));
-    const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const subtotal = items.reduce((sum: number, item: any) => sum + item.subtotal, 0);
     const total = subtotal;
     
     const sale = await prisma.sale.create({
@@ -471,14 +471,14 @@ async function main() {
   for (let i = 0; i < 5; i++) {
     const supplier = suppliers[i % suppliers.length];
     const orderProducts = downtownProducts.slice(i * 2, i * 2 + 3);
-    const items = orderProducts.map(p => ({
+    const items = orderProducts.map((p: any) => ({
       productId: p.id,
       orderedQuantity: 50 + i * 10,
       receivedQuantity: i < 3 ? 50 + i * 10 : 0,
       unitCost: p.price * 0.6,
       total: (50 + i * 10) * p.price * 0.6
     }));
-    const subtotal = items.reduce((sum, item) => sum + item.total, 0);
+    const subtotal = items.reduce((sum: number, item: any) => sum + item.total, 0);
 
     const po = await prisma.purchaseOrder.create({
       data: {
@@ -536,7 +536,7 @@ async function main() {
         status: i === 0 ? 'COMPLETED' : 'PENDING',
         completedAt: i === 0 ? new Date() : null,
         items: {
-          create: transferProducts.map(p => ({
+          create: transferProducts.map((p: any) => ({
             barcode: p.barcode,
             productName: p.name,
             quantity: 10 + i * 5

@@ -36,7 +36,7 @@ async function checkConflicts() {
       orderBy: { barcode: 'asc' }
     });
     
-    allProducts.forEach(p => {
+    allProducts.forEach((p: any) => {
       console.log(`  ${p.barcode} - ${p.name}`);
     });
     

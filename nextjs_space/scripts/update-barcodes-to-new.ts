@@ -45,7 +45,7 @@ async function updateBarcodes() {
       select: { name: true, barcode: true }
     });
     
-    products.forEach(p => {
+    products.forEach((p: any) => {
       console.log(`  ${p.barcode} - ${p.name}`);
     });
     

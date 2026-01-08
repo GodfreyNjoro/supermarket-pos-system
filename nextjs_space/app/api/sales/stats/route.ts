@@ -79,7 +79,7 @@ export async function GET(request: Request) {
         `;
 
     // Convert BigInt to number for JSON serialization
-    const formattedSalesByDay = salesByDay?.map?.((item) => ({
+    const formattedSalesByDay = salesByDay?.map?.((item: any) => ({
       date: item?.date,
       total: item?.total,
       count: Number(item?.count),
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
 
     // Fetch product details
     const topProductsWithDetails = await Promise.all(
-      topProducts?.map?.(async (item) => {
+      topProducts?.map?.(async (item: any) => {
         const product = await prisma.product.findUnique({
           where: { id: item?.productId },
           include: { category: true },

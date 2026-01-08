@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     const returnNumber = `RET-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     // Create return and update inventory in a transaction
-    const returnRecord = await prisma.$transaction(async (tx) => {
+    const returnRecord = await prisma.$transaction(async (tx: Omit<typeof prisma, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>) => {
       // Create the return
       const newReturn = await tx.return.create({
         data: {

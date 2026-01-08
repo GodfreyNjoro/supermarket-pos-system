@@ -18,12 +18,12 @@ async function checkAndFixBarcodes() {
     console.log(`Found ${products.length} products`);
     
     // Show current state
-    products.forEach(product => {
+    products.forEach((product: any) => {
       console.log(`- ${product.name}: ${product.barcode || 'NO BARCODE'}`);
     });
     
     // Check if any product is missing barcode or has invalid barcode
-    const productsNeedingFix = products.filter(p => 
+    const productsNeedingFix = products.filter((p: any) => 
       !p.barcode || p.barcode.length < 10
     );
     
@@ -72,7 +72,7 @@ async function checkAndFixBarcodes() {
       select: { name: true, barcode: true }
     });
     
-    updatedProducts.forEach(p => {
+    updatedProducts.forEach((p: any) => {
       console.log(`  ${p.barcode} - ${p.name}`);
     });
     
