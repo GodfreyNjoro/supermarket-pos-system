@@ -1,0 +1,28 @@
+appId: com.superpos.app
+productName: SuperPOS
+directories:
+  output: dist
+  buildResources: build
+files:
+  - electron/**/*
+  - out/**/*
+  - package.json
+win:
+  target:
+    - nsis
+  icon: public/favicon.svg
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+mac:
+  target:
+    - dmg
+  icon: public/favicon.svg
+linux:
+  target:
+    - AppImage
+    - deb
+  icon: public/favicon.svg
+  category: Office
