@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     } else {
       // New products mode
       const categories = await prisma.category.findMany();
-      const categoryMap = new Map(categories.map(c => [c.name.toLowerCase(), c.id]));
+      const categoryMap = new Map(categories.map((c: { name: string; id: string }) => [c.name.toLowerCase(), c.id]));
 
       for (const row of data) {
         const barcode = row.barcode?.toString() || row.Barcode?.toString();
