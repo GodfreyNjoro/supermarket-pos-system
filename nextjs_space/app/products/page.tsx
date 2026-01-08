@@ -4,7 +4,7 @@ import { SessionGuard } from '@/components/session-guard';
 import { RoleGuard } from '@/components/role-guard';
 import { Navigation } from '@/components/navigation';
 import { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, Package, AlertTriangle, Printer } from 'lucide-react';
+import { Plus, Edit, Trash2, Package, AlertTriangle, Printer, FileSpreadsheet } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
@@ -102,13 +102,22 @@ export default function ProductsPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Products</h1>
                 <p className="mt-2 text-gray-600">Manage your inventory</p>
               </div>
-              <Link
-                href="/products/new"
-                className="flex items-center space-x-2 rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700"
-              >
-                <Plus className="h-5 w-5" />
-                <span>Add Product</span>
-              </Link>
+              <div className="flex gap-3">
+                <Link
+                  href="/products/import"
+                  className="flex items-center space-x-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+                >
+                  <FileSpreadsheet className="h-5 w-5" />
+                  <span>Import Excel</span>
+                </Link>
+                <Link
+                  href="/products/new"
+                  className="flex items-center space-x-2 rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span>Add Product</span>
+                </Link>
+              </div>
             </div>
 
             {/* Filters */}
