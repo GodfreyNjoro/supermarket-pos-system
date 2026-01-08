@@ -132,10 +132,9 @@ export default function DashboardPage() {
                     <div>
                       <p className="text-sm font-medium text-gray-600">Avg Transaction</p>
                       <p className="mt-2 text-3xl font-bold text-gray-900">
-                        $
-                        {stats?.totalTransactions && stats?.totalSales
-                          ? (stats.totalSales / stats.totalTransactions)?.toFixed?.(2) ?? '0.00'
-                          : '0.00'}
+                        {formatPrice(stats?.totalTransactions && stats?.totalSales
+                          ? stats.totalSales / stats.totalTransactions
+                          : 0)}
                       </p>
                     </div>
                     <div className="rounded-full bg-purple-100 p-3">
