@@ -1,8 +1,20 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  onNewSale: (callback) => ipcRenderer.on('new-sale', callback),
-  onShowShortcuts: (callback) => ipcRenderer.on('show-shortcuts', callback),
+  // Existing APIs
+  newSale: () => ipcRenderer.send('new-sale'),
+  showShortcuts: () => ipcRenderer.send('show-shortcuts'),
   platform: process.platform,
-  isElectron: true
+  
+  // Database config APIs
+  getDbConfig: () => ipcRenderer.invoke('get-db-config'),
+  saveDbConfig: (config) => ipcRenderer.invoke('save-db-config', config),
+  
+  // Sync APIs
+  getSyncStatus: () => ipcRenderer.invoke('get-sync-status'),
+  triggerSync: () => ipcRenderer.invoke('trigger-sync'),
+  
+  // App info
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  isOffline: () => ipcRenderer.invoke('is-offline')
 });

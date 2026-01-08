@@ -1,6 +1,11 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
-const isDev = require('electron-is-dev');
+const fs = require('fs');
+
+const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+
+// Config file path in user data directory
+const CONFIG_PATH = path.join(app.getPath('userData'), 'db-config.json');
 
 let mainWindow;
 
@@ -16,83 +21,143 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js')
     },
     icon: path.join(__dirname, '../public/favicon.svg'),
-    title: 'SuperPOS - Point of Sale System',
-    autoHideMenuBar: false,
+    title: 'SuperPOS - Supermarket POS System'
   });
 
-  const url = isDev
-    ? 'http://localhost:3000'
-    : `file://${path.join(__dirname, '../out/index.html')}`;
-
-  mainWindow.loadURL(url);
-
-  // Open DevTools in development
+  // Load the app
   if (isDev) {
+    mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
+  } else {
+    // Production: load from built files
+    mainWindow.loadFile(path.join(__dirname, '../out/index.html'));
   }
+
+  // Create application menu
+  const template = [
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New Sale',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => mainWindow.webContents.send('new-sale')
+        },
+        { type: 'separator' },
+        {
+          label: 'Database Settings',
+          click: () => mainWindow.loadURL(isDev ? 'http://localhost:3000/settings/database' : 'file://' + path.join(__dirname, '../out/settings/database.html'))
+        },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'Keyboard Shortcuts',
+          accelerator: 'Shift+?',
+          click: () => mainWindow.webContents.send('show-shortcuts')
+        },
+        { type: 'separator' },
+        {
+          label: 'About SuperPOS',
+          click: () => {
+            const { dialog } = require('electron');
+            dialog.showMessageBox(mainWindow, {
+              type: 'info',
+              title: 'About SuperPOS',
+              message: 'SuperPOS - Supermarket POS System',
+              detail: `Version: ${app.getVersion()}\nElectron: ${process.versions.electron}\nNode: ${process.versions.node}`
+            });
+          }
+        }
+      ]
+    }
+  ];
+
+  // macOS specific menu adjustments
+  if (process.platform === 'darwin') {
+    template.unshift({
+      label: app.name,
+      submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    });
+  }
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
-// Custom menu
-const menuTemplate = [
-  {
-    label: 'File',
-    submenu: [
-      { label: 'New Sale', accelerator: 'CmdOrCtrl+N', click: () => mainWindow.webContents.send('new-sale') },
-      { type: 'separator' },
-      { label: 'Exit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      { role: 'reload' },
-      { role: 'forceReload' },
-      { type: 'separator' },
-      { role: 'resetZoom' },
-      { role: 'zoomIn' },
-      { role: 'zoomOut' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' }
-    ]
-  },
-  {
-    label: 'Help',
-    submenu: [
-      {
-        label: 'Keyboard Shortcuts',
-        accelerator: 'Shift+?',
-        click: () => mainWindow.webContents.send('show-shortcuts')
-      },
-      { type: 'separator' },
-      { label: 'About SuperPOS', click: () => {
-        const { dialog } = require('electron');
-        dialog.showMessageBox(mainWindow, {
-          type: 'info',
-          title: 'About SuperPOS',
-          message: 'SuperPOS - Point of Sale System',
-          detail: 'Version 1.0.0\nA modern POS system for supermarkets.'
-        });
-      }}
-    ]
+// IPC Handlers for database config
+ipcMain.handle('get-db-config', async () => {
+  try {
+    if (fs.existsSync(CONFIG_PATH)) {
+      const data = fs.readFileSync(CONFIG_PATH, 'utf-8');
+      return JSON.parse(data);
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to read db config:', error);
+    return null;
   }
-];
-
-if (isDev) {
-  menuTemplate[1].submenu.push(
-    { type: 'separator' },
-    { role: 'toggleDevTools' }
-  );
-}
-
-app.whenReady().then(() => {
-  const menu = Menu.buildFromTemplate(menuTemplate);
-  Menu.setApplicationMenu(menu);
-  createWindow();
 });
+
+ipcMain.handle('save-db-config', async (event, config) => {
+  try {
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to save db config:', error);
+    return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle('get-app-version', () => app.getVersion());
+
+ipcMain.handle('is-offline', () => {
+  const { net } = require('electron');
+  return !net.isOnline();
+});
+
+ipcMain.handle('get-sync-status', async () => {
+  // Will be expanded in Phase 2
+  return { status: 'idle', lastSync: null, pendingChanges: 0 };
+});
+
+ipcMain.handle('trigger-sync', async () => {
+  // Will be expanded in Phase 2
+  return { success: true };
+});
+
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

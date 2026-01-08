@@ -21,6 +21,8 @@ import {
   ChevronRight,
   Pin,
   PinOff,
+  Settings,
+  Database,
 } from 'lucide-react';
 import { useState } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
@@ -59,6 +61,7 @@ export function Navigation() {
     { name: 'Reports', href: '/reports', icon: BarChart3, show: isManagerOrAdmin },
     { name: 'Returns', href: '/returns', icon: RotateCcw, show: isManagerOrAdmin },
     { name: 'Users', href: '/users', icon: UserCog, show: isAdmin },
+    { name: 'Settings', href: '/settings/database', icon: Settings, show: isAdmin },
   ];
 
   const inventorySubMenu = [
