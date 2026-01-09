@@ -15,6 +15,19 @@ export function AppWalkthrough({ runTour, onComplete }: AppWalkthroughProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const [stepIndex, setStepIndex] = useState(0);
+  const [tourReady, setTourReady] = useState(false);
+
+  // Wait for DOM to be ready before starting tour
+  useEffect(() => {
+    if (runTour) {
+      const timer = setTimeout(() => {
+        setTourReady(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      setTourReady(false);
+    }
+  }, [runTour]);
 
   // Define comprehensive tour steps
   const steps: Step[] = [
@@ -196,15 +209,25 @@ export function AppWalkthrough({ runTour, onComplete }: AppWalkthroughProps) {
     }
   };
 
+  // Filter steps to only include those with mounted targets
+  const activeSteps = steps.filter(step => {
+    if (step.target === 'body') return true;
+    
+    const targetElement = document.querySelector(step.target as string);
+    return targetElement !== null;
+  });
+
   return (
     <Joyride
-      steps={steps}
-      run={runTour}
+      steps={activeSteps}
+      run={runTour && tourReady}
       continuous
       showProgress
       showSkipButton
       stepIndex={stepIndex}
       callback={handleJoyrideCallback}
+      disableScrolling={false}
+      spotlightClicks={false}
       styles={{
         options: {
           primaryColor: '#1e40af',
@@ -264,10 +287,13 @@ export function useAppWalkthrough() {
     
     // Auto-start tour for new users (only once)
     if (status === 'authenticated' && !tourCompleted) {
+      // Ensure sidebar is pinned for better tour visibility
+      localStorage.setItem('sidebar-pinned', 'true');
+      
       // Delay to ensure UI is fully loaded
       const timer = setTimeout(() => {
         setRunTour(true);
-      }, 1000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -275,6 +301,9 @@ export function useAppWalkthrough() {
   useEffect(() => {
     // Listen for custom event to start tour manually
     const handleStartTour = () => {
+      // Ensure sidebar is pinned for better tour visibility
+      localStorage.setItem('sidebar-pinned', 'true');
+      window.dispatchEvent(new Event('storage'));
       setRunTour(true);
     };
 

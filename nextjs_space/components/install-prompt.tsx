@@ -14,7 +14,10 @@ export function InstallPrompt() {
       e.preventDefault();
       // Save the event so it can be triggered later
       setDeferredPrompt(e);
-      setShowPrompt(true);
+      // Show our custom install prompt after a short delay
+      setTimeout(() => {
+        setShowPrompt(true);
+      }, 2000);
     };
 
     window.addEventListener('beforeinstallprompt', handler);

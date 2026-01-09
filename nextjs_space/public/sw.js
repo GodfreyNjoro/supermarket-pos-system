@@ -6,8 +6,7 @@ const FILES_TO_CACHE = [
   '/',
   '/pos',
   '/products',
-  '/dashboard',
-  '/offline'
+  '/dashboard'
 ];
 
 // Install event - cache static assets
@@ -16,7 +15,15 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[ServiceWorker] Pre-caching offline page');
-      return cache.addAll(FILES_TO_CACHE);
+      // Cache files individually to handle failures gracefully
+      return Promise.allSettled(
+        FILES_TO_CACHE.map(url => 
+          cache.add(url).catch(err => {
+            console.warn('[ServiceWorker] Failed to cache:', url, err);
+            return null;
+          })
+        )
+      );
     })
   );
   self.skipWaiting();
