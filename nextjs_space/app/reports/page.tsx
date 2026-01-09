@@ -543,6 +543,11 @@ export default function ReportsPage() {
 
 // Sales Report Content Component
 function SalesReportContent({ data, formatPrice }: any) {
+  // Defensive checks for data structure
+  const summary = data?.summary || {};
+  const byPaymentMethod = data?.byPaymentMethod || {};
+  const transactions = data?.transactions || [];
+
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
@@ -550,19 +555,19 @@ function SalesReportContent({ data, formatPrice }: any) {
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Revenue</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.totalRevenue)}
+            {formatPrice(summary.totalRevenue || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Transactions</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.totalTransactions}
+            {summary.totalTransactions || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Average Transaction</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.averageTransaction)}
+            {formatPrice(summary.averageTransaction || 0)}
           </div>
         </Card>
       </div>
@@ -571,17 +576,17 @@ function SalesReportContent({ data, formatPrice }: any) {
       <div>
         <h3 className="mb-3 text-lg font-semibold text-gray-900">Payment Methods</h3>
         <div className="grid gap-3 sm:grid-cols-2">
-          {Object.entries(data.byPaymentMethod).map(([method, stats]: any) => (
+          {Object.entries(byPaymentMethod).map(([method, stats]: any) => (
             <Card key={method} className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm font-medium text-gray-600">{method}</div>
                   <div className="mt-1 text-xl font-bold text-gray-900">
-                    {formatPrice(stats.total)}
+                    {formatPrice(stats?.total || 0)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">{stats.count} transactions</div>
+                  <div className="text-sm text-gray-600">{stats?.count || 0} transactions</div>
                 </div>
               </div>
             </Card>
@@ -593,48 +598,52 @@ function SalesReportContent({ data, formatPrice }: any) {
       <div>
         <h3 className="mb-3 text-lg font-semibold text-gray-900">Recent Transactions</h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Receipt #
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Date
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Total
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Payment
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Cashier
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {data.transactions.slice(0, 20).map((t: any) => (
-                <tr key={t.id}>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
-                    {t.receiptNumber}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
-                    {formatDateTime(t.date)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900">
-                    {formatPrice(t.total)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
-                    {t.paymentMethod}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
-                    {t.cashier}
-                  </td>
+          {transactions.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Receipt #
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Date
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Total
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Payment
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Cashier
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {transactions.slice(0, 20).map((t: any) => (
+                  <tr key={t.id}>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
+                      {t.receiptNumber}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                      {formatDateTime(t.date)}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900">
+                      {formatPrice(t.total)}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                      {t.paymentMethod}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                      {t.cashier}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="py-4 text-center text-gray-500">No transactions found for this period</p>
+          )}
         </div>
       </div>
     </div>
@@ -643,6 +652,11 @@ function SalesReportContent({ data, formatPrice }: any) {
 
 // Inventory Report Content Component
 function InventoryReportContent({ data, formatPrice }: any) {
+  // Defensive checks for data structure
+  const summary = data?.summary || {};
+  const lowStockItems = data?.lowStockItems || [];
+  const products = data?.products || [];
+
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
@@ -650,31 +664,31 @@ function InventoryReportContent({ data, formatPrice }: any) {
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Products</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.totalProducts}
+            {summary.totalProducts || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Stock Value</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.totalStockValue)}
+            {formatPrice(summary.totalStockValue || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Low Stock Items</div>
           <div className="mt-2 text-2xl font-bold text-orange-600">
-            {data.summary.lowStockCount}
+            {summary.lowStockCount || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Out of Stock</div>
           <div className="mt-2 text-2xl font-bold text-red-600">
-            {data.summary.outOfStockCount}
+            {summary.outOfStockCount || 0}
           </div>
         </Card>
       </div>
 
       {/* Low Stock Alerts */}
-      {data.lowStockItems.length > 0 && (
+      {lowStockItems.length > 0 && (
         <div>
           <h3 className="mb-3 text-lg font-semibold text-gray-900">Low Stock Alerts</h3>
           <div className="overflow-x-auto">
@@ -699,7 +713,7 @@ function InventoryReportContent({ data, formatPrice }: any) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {data.lowStockItems.slice(0, 15).map((p: any) => (
+                {lowStockItems.slice(0, 15).map((p: any) => (
                   <tr key={p.id}>
                     <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
                       {p.name}
@@ -728,31 +742,32 @@ function InventoryReportContent({ data, formatPrice }: any) {
       <div>
         <h3 className="mb-3 text-lg font-semibold text-gray-900">All Products</h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Product
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Barcode
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Category
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Stock
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Price
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Value
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {data.products.slice(0, 20).map((p: any) => (
+          {products.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Product
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Barcode
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Category
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Stock
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Price
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Value
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {products.slice(0, 20).map((p: any) => (
                 <tr key={p.id}>
                   <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
                     {p.name}
@@ -776,6 +791,9 @@ function InventoryReportContent({ data, formatPrice }: any) {
               ))}
             </tbody>
           </table>
+          ) : (
+            <p className="py-4 text-center text-gray-500">No products found</p>
+          )}
         </div>
       </div>
     </div>
@@ -784,6 +802,11 @@ function InventoryReportContent({ data, formatPrice }: any) {
 
 // Products Report Content Component
 function ProductsReportContent({ data, formatPrice }: any) {
+  // Defensive checks for data structure
+  const summary = data?.summary || {};
+  const topSellers = data?.topSellers || [];
+  const slowMovers = data?.slowMovers || [];
+
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
@@ -791,25 +814,25 @@ function ProductsReportContent({ data, formatPrice }: any) {
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Products Sold</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.totalProductsSold}
+            {summary.totalProductsSold || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Quantity Sold</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.totalQuantitySold}
+            {summary.totalQuantitySold || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Revenue</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.totalRevenue)}
+            {formatPrice(summary.totalRevenue || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">No Sales</div>
           <div className="mt-2 text-2xl font-bold text-orange-600">
-            {data.summary.productsWithNoSales}
+            {summary.productsWithNoSales || 0}
           </div>
         </Card>
       </div>
@@ -818,31 +841,32 @@ function ProductsReportContent({ data, formatPrice }: any) {
       <div>
         <h3 className="mb-3 text-lg font-semibold text-gray-900">Top Selling Products</h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-emerald-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Rank
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Product
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Category
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Qty Sold
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Revenue
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Transactions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {data.topSellers.slice(0, 20).map((p: any, index: number) => (
+          {topSellers.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-emerald-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Rank
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Product
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Category
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Qty Sold
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Revenue
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Transactions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {topSellers.slice(0, 20).map((p: any, index: number) => (
                 <tr key={p.id}>
                   <td className="whitespace-nowrap px-4 py-3 text-sm font-bold text-emerald-600">
                     #{index + 1}
@@ -866,11 +890,14 @@ function ProductsReportContent({ data, formatPrice }: any) {
               ))}
             </tbody>
           </table>
+          ) : (
+            <p className="py-4 text-center text-gray-500">No product sales data available</p>
+          )}
         </div>
       </div>
 
       {/* Slow Movers */}
-      {data.slowMovers.length > 0 && (
+      {slowMovers.length > 0 && (
         <div>
           <h3 className="mb-3 text-lg font-semibold text-gray-900">Slow Moving Products</h3>
           <div className="overflow-x-auto">
@@ -895,7 +922,7 @@ function ProductsReportContent({ data, formatPrice }: any) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {data.slowMovers.slice(0, 15).map((p: any) => (
+                {slowMovers.slice(0, 15).map((p: any) => (
                   <tr key={p.id}>
                     <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
                       {p.name}
@@ -925,6 +952,10 @@ function ProductsReportContent({ data, formatPrice }: any) {
 
 // Financial Report Content Component
 function FinancialReportContent({ data, formatPrice }: any) {
+  // Defensive checks for data structure
+  const summary = data?.summary || {};
+  const paymentMethodBreakdown = data?.paymentMethodBreakdown || {};
+
   return (
     <div className="space-y-6">
       {/* Financial Summary */}
@@ -932,19 +963,19 @@ function FinancialReportContent({ data, formatPrice }: any) {
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Gross Revenue</div>
           <div className="mt-2 text-2xl font-bold text-emerald-600">
-            {formatPrice(data.summary.grossRevenue)}
+            {formatPrice(summary.grossRevenue || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Returns</div>
           <div className="mt-2 text-2xl font-bold text-red-600">
-            {formatPrice(data.summary.totalReturns)}
+            {formatPrice(summary.totalReturns || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Net Revenue</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.netRevenue)}
+            {formatPrice(summary.netRevenue || 0)}
           </div>
         </Card>
       </div>
@@ -953,19 +984,19 @@ function FinancialReportContent({ data, formatPrice }: any) {
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Cost of Goods Sold</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.cogs)}
+            {formatPrice(summary.cogs || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Gross Profit</div>
           <div className="mt-2 text-2xl font-bold text-emerald-600">
-            {formatPrice(data.summary.grossProfit)}
+            {formatPrice(summary.grossProfit || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Gross Margin</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.grossMargin.toFixed(2)}%
+            {(summary.grossMargin || 0).toFixed(2)}%
           </div>
         </Card>
       </div>
@@ -974,7 +1005,7 @@ function FinancialReportContent({ data, formatPrice }: any) {
       <div>
         <h3 className="mb-3 text-lg font-semibold text-gray-900">Payment Method Breakdown</h3>
         <div className="grid gap-3 sm:grid-cols-2">
-          {Object.entries(data.paymentMethodBreakdown).map(([method, stats]: any) => (
+          {Object.entries(paymentMethodBreakdown).map(([method, stats]: any) => (
             <Card key={method} className="p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -1039,6 +1070,10 @@ function FinancialReportContent({ data, formatPrice }: any) {
 
 // Cashier Report Content Component
 function CashierReportContent({ data, formatPrice }: any) {
+  // Defensive checks for data structure
+  const summary = data?.summary || {};
+  const cashierPerformance = data?.cashierPerformance || [];
+
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
@@ -1046,25 +1081,25 @@ function CashierReportContent({ data, formatPrice }: any) {
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Cashiers</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.totalCashiers}
+            {summary.totalCashiers || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Transactions</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {data.summary.totalTransactions}
+            {summary.totalTransactions || 0}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Total Sales</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.totalSales)}
+            {formatPrice(summary.totalSales || 0)}
           </div>
         </Card>
         <Card className="p-4">
           <div className="text-sm font-medium text-gray-600">Avg Transaction</div>
           <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatPrice(data.summary.averageTransactionSize)}
+            {formatPrice(summary.averageTransactionSize || 0)}
           </div>
         </Card>
       </div>
@@ -1073,34 +1108,35 @@ function CashierReportContent({ data, formatPrice }: any) {
       <div>
         <h3 className="mb-3 text-lg font-semibold text-gray-900">Cashier Performance</h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Rank
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Cashier
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Role
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Transactions
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Total Sales
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Avg Transaction
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Items/Trans
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {data.cashierPerformance.map((c: any, index: number) => (
+          {cashierPerformance.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Rank
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Cashier
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Role
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Transactions
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Total Sales
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Avg Transaction
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Items/Trans
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {cashierPerformance.map((c: any, index: number) => (
                 <tr key={c.id}>
                   <td className="whitespace-nowrap px-4 py-3 text-sm font-bold text-emerald-600">
                     #{index + 1}
@@ -1127,14 +1163,18 @@ function CashierReportContent({ data, formatPrice }: any) {
               ))}
             </tbody>
           </table>
+          ) : (
+            <p className="py-4 text-center text-gray-500">No cashier performance data available</p>
+          )}
         </div>
       </div>
 
       {/* Payment Method Split per Cashier */}
-      <div>
-        <h3 className="mb-3 text-lg font-semibold text-gray-900">Payment Method Split</h3>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {data.cashierPerformance.map((c: any) => (
+      {cashierPerformance.length > 0 && (
+        <div>
+          <h3 className="mb-3 text-lg font-semibold text-gray-900">Payment Method Split</h3>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {cashierPerformance.map((c: any) => (
             <Card key={c.id} className="p-4">
               <div className="mb-2 font-medium text-gray-900">{c.name}</div>
               <div className="space-y-2 text-sm">
@@ -1154,7 +1194,8 @@ function CashierReportContent({ data, formatPrice }: any) {
             </Card>
           ))}
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
