@@ -8,7 +8,26 @@ This folder contains **everything you need** to understand, demonstrate, and sho
 
 ## 📄 **Main Documents** (Start Here!)
 
-### 1. ⭐ **SuperPOS_Complete_Screenshot_Walkthrough.pdf** (10.82 MB) 
+### 1. 📄 **SuperPOS_Product_Brochure.pdf** (14.5 KB) ⭐ **NEW**
+**👉 PERFECT FOR PRESENTATIONS & QUICK OVERVIEW**
+
+- **15+ pages** of professional product overview
+- **Marketing brochure** with feature highlights
+- **Quick start guide** for immediate use
+- **Perfect for:** Stakeholder presentations, quick reference, sales demos
+- **Compact size:** Easy to share and distribute
+
+**What's Inside:**
+- Complete feature overview
+- User roles and access levels
+- Deployment options (Web, PWA, Desktop)
+- Available tutorials summary
+- System statistics and demo data
+- Contact information and quick links
+
+---
+
+### 2. ⭐ **SuperPOS_Complete_Screenshot_Walkthrough.pdf** (10.82 MB) 
 **👉 START WITH THIS FOR VISUAL WALKTHROUGH**
 
 - **110+ pages** of screenshots with detailed captions
@@ -31,7 +50,7 @@ This folder contains **everything you need** to understand, demonstrate, and sho
 
 ---
 
-### 2. 📘 **SuperPOS_Complete_Demo_Tutorial.pdf** (26 KB)
+### 3. 📘 **SuperPOS_Complete_Demo_Tutorial.pdf** (26 KB)
 **👉 READ THIS FOR DETAILED INSTRUCTIONS**
 
 - **40+ pages** of comprehensive written tutorial
@@ -52,7 +71,7 @@ This folder contains **everything you need** to understand, demonstrate, and sho
 
 ---
 
-### 3. 📋 **README_Demo_Package.md** (9.7 KB)
+### 4. 📋 **README_Demo_Package.md** (9.7 KB)
 **👉 QUICK REFERENCE GUIDE**
 
 - Package contents overview
@@ -65,7 +84,7 @@ This folder contains **everything you need** to understand, demonstrate, and sho
 
 ---
 
-### 4. 📝 **Screenshot_Walkthrough_Summary.md** (13 KB)
+### 5. 📝 **Screenshot_Walkthrough_Summary.md** (13 KB)
 **👉 TEXT SUMMARY OF SCREENSHOTS**
 
 - Feature-by-feature breakdown
@@ -76,7 +95,7 @@ This folder contains **everything you need** to understand, demonstrate, and sho
 
 ---
 
-### 5. 📖 **SCREENSHOT_PDF_README.md** (New!)
+### 6. 📖 **SCREENSHOT_PDF_README.md**
 **👉 DETAILED GUIDE TO THE SCREENSHOT PDF**
 
 - Complete explanation of the screenshot PDF
@@ -150,9 +169,10 @@ All the raw screenshots used in the PDF:
 ## 📊 **Package Statistics**
 
 ### Documents:
-- **2 PDF files** (10.85 MB total)
+- **3 PDF files** (10.88 MB total)
 - **3 Markdown guides** (35 KB total)
 - **103 screenshots** (14 MB total)
+- **Total: 109 files** (~25 MB)
 
 ### Content:
 - **110+ pages** of visual walkthrough

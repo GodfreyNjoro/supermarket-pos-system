@@ -6,7 +6,15 @@ This comprehensive demo package includes everything you need to understand and s
 
 ### 📄 Documents Included:
 
-1. **SuperPOS_Complete_Demo_Tutorial.pdf** (26 KB)
+1. **SuperPOS_Product_Brochure.pdf** (14.5 KB) ⭐ **NEW**
+   - Professional product overview
+   - 15+ page marketing brochure
+   - Feature highlights and benefits
+   - Quick start guide
+   - Contact information
+   - Perfect for presentations
+
+2. **SuperPOS_Complete_Demo_Tutorial.pdf** (26 KB)
    - 40+ page comprehensive tutorial
    - Detailed feature explanations
    - Best practices and usage tips
@@ -14,7 +22,7 @@ This comprehensive demo package includes everything you need to understand and s
    - Technical specifications
    - Support resources
 
-2. **Screenshot_Walkthrough_Summary.md** (13 KB)
+3. **Screenshot_Walkthrough_Summary.md** (13 KB)
    - Organized visual walkthrough
    - Feature-by-feature breakdown
    - Screenshot descriptions
