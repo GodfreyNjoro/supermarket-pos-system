@@ -25,7 +25,7 @@ import {
   Database,
   HelpCircle,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
 import { StoreSelector } from '@/components/store-selector';
 import { CurrencySelector } from '@/components/currency-selector';
@@ -40,6 +40,18 @@ export function Navigation() {
   );
   const [isHovered, setIsHovered] = useState(false);
   const { isPinned, setIsPinned } = useSidebar();
+
+  // Listen for tour start event to expand inventory submenu
+  useEffect(() => {
+    const handleTourStart = () => {
+      setInventoryExpanded(true);
+    };
+
+    window.addEventListener('start-tour', handleTourStart);
+    return () => {
+      window.removeEventListener('start-tour', handleTourStart);
+    };
+  }, []);
 
   const togglePin = () => {
     setIsPinned(!isPinned);

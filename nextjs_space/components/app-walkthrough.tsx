@@ -290,6 +290,9 @@ export function useAppWalkthrough() {
       // Ensure sidebar is pinned for better tour visibility
       localStorage.setItem('sidebar-pinned', 'true');
       
+      // Dispatch event to expand inventory submenu
+      window.dispatchEvent(new CustomEvent('start-tour'));
+      
       // Delay to ensure UI is fully loaded
       const timer = setTimeout(() => {
         setRunTour(true);
