@@ -955,6 +955,7 @@ function FinancialReportContent({ data, formatPrice }: any) {
   // Defensive checks for data structure
   const summary = data?.summary || {};
   const paymentMethodBreakdown = data?.paymentMethodBreakdown || {};
+  const returns = data?.returns || [];
 
   return (
     <div className="space-y-6">
@@ -1027,9 +1028,9 @@ function FinancialReportContent({ data, formatPrice }: any) {
       </div>
 
       {/* Returns Summary */}
-      {data.returns.length > 0 && (
+      {returns.length > 0 && (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-gray-900">Returns ({data.returns.length})</h3>
+          <h3 className="mb-3 text-lg font-semibold text-gray-900">Returns ({returns.length})</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-red-50">
@@ -1046,7 +1047,7 @@ function FinancialReportContent({ data, formatPrice }: any) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {data.returns.slice(0, 10).map((ret: any) => (
+                {returns.slice(0, 10).map((ret: any) => (
                   <tr key={ret.id}>
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
                       {formatDateTime(ret.date)}
