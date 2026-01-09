@@ -25,7 +25,7 @@ jobs:
           node-version: '20'
       - name: Remove symlink
         run: rm -f yarn.lock || true
-        shell: bash
+        shell: bash terminal
       - run: yarn install
       - run: yarn prisma generate
       - run: yarn build
