@@ -1,5 +1,8 @@
 {
   "name": "app",
+  "version": "1.0.0",
+  "description": "Supermarket POS System - Comprehensive point-of-sale solution with inventory management, reporting, and multi-store support",
+  "author": "SuperPOS Team",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -141,6 +144,5 @@
     "> 0.5%",
     "last 2 versions",
     "not dead"
-  ],
-  "main": "electron/main.js"
+  ]
 }
