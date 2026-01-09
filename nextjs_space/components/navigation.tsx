@@ -23,6 +23,7 @@ import {
   PinOff,
   Settings,
   Database,
+  HelpCircle,
 } from 'lucide-react';
 import { useState } from 'react';
 import { OfflineIndicator } from '@/components/offline-indicator';
@@ -53,19 +54,19 @@ export function Navigation() {
   const isInventoryOrAbove = isManagerOrAdmin || userRole === 'INVENTORY_CLERK';
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: BarChart3, show: true },
-    { name: 'POS', href: '/pos', icon: ShoppingCart, show: true },
-    { name: 'Products', href: '/products', icon: Package, show: isManagerOrAdmin },
+    { name: 'Dashboard', href: '/dashboard', icon: BarChart3, show: true, tourId: 'nav-dashboard' },
+    { name: 'POS', href: '/pos', icon: ShoppingCart, show: true, tourId: 'nav-pos' },
+    { name: 'Products', href: '/products', icon: Package, show: isManagerOrAdmin, tourId: 'nav-products' },
     { name: 'Customers', href: '/customers', icon: Users, show: isManagerOrAdmin },
     { name: 'Sales', href: '/sales', icon: Receipt, show: true },
-    { name: 'Reports', href: '/reports', icon: BarChart3, show: isManagerOrAdmin },
+    { name: 'Reports', href: '/reports', icon: BarChart3, show: isManagerOrAdmin, tourId: 'nav-reports' },
     { name: 'Returns', href: '/returns', icon: RotateCcw, show: isManagerOrAdmin },
     { name: 'Users', href: '/users', icon: UserCog, show: isAdmin },
     { name: 'Settings', href: '/settings/database', icon: Settings, show: isAdmin },
   ];
 
   const inventorySubMenu = [
-    { name: 'Stock Management', href: '/inventory', icon: Boxes },
+    { name: 'Stock Management', href: '/inventory', icon: Boxes, tourId: 'nav-inventory' },
     { name: 'Suppliers', href: '/suppliers', icon: Truck },
     { name: 'History', href: '/inventory/history', icon: History },
   ];
@@ -134,9 +135,15 @@ export function Navigation() {
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <OfflineIndicator />
-            <CurrencySelector />
-            <StoreSelector />
+            <div data-tour="online-indicator">
+              <OfflineIndicator />
+            </div>
+            <div data-tour="currency-selector">
+              <CurrencySelector />
+            </div>
+            <div data-tour="store-selector">
+              <StoreSelector />
+            </div>
             <div className="hidden md:flex items-center space-x-2">
               <span className="text-sm font-medium text-gray-600">{session?.user?.name}</span>
               <span className="rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-700">{userRole}</span>
@@ -175,8 +182,11 @@ export function Navigation() {
               const Icon = item.icon;
               return (
                 <li key={item.name}>
-                  <Link href={item.href} onClick={() => setMobileMenuOpen(false)}
+                  <Link 
+                    href={item.href} 
+                    onClick={() => setMobileMenuOpen(false)}
                     title={!sidebarVisible ? item.name : undefined}
+                    data-tour={(item as any).tourId}
                     className={`flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                       isActive ? 'bg-emerald-100 text-emerald-700' : 'text-gray-700 hover:bg-gray-100'
                     } ${sidebarVisible ? 'space-x-3' : 'justify-center'}`}>
@@ -210,7 +220,10 @@ export function Navigation() {
                           const Icon = sub.icon;
                           return (
                             <li key={sub.name}>
-                              <Link href={sub.href} onClick={() => setMobileMenuOpen(false)}
+                              <Link 
+                                href={sub.href} 
+                                onClick={() => setMobileMenuOpen(false)}
+                                data-tour={(sub as any).tourId}
                                 className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                                   isActive ? 'bg-emerald-100 text-emerald-700' : 'text-gray-600 hover:bg-gray-100'
                                 }`}>
@@ -234,6 +247,24 @@ export function Navigation() {
                 )}
               </li>
             )}
+
+            {/* Start Tour Button */}
+            <li className="mt-auto pt-4 border-t border-gray-200">
+              <button
+                onClick={() => {
+                  localStorage.removeItem('superpos-tour-completed');
+                  window.dispatchEvent(new CustomEvent('start-tour'));
+                  setMobileMenuOpen(false);
+                }}
+                title={!sidebarVisible ? 'Start Tour' : undefined}
+                className={`flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors ${
+                  sidebarVisible ? 'space-x-3' : 'justify-center'
+                }`}
+              >
+                <HelpCircle className="h-5 w-5 flex-shrink-0" />
+                {sidebarVisible && <span>Start Tour</span>}
+              </button>
+            </li>
           </ul>
         </nav>
       </aside>

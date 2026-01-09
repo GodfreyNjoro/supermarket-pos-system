@@ -8,7 +8,19 @@ import { Toaster } from '@/components/ui/toaster';
 import { StoreProvider } from '@/lib/contexts/store-context';
 import { CurrencyProvider } from '@/lib/contexts/currency-context';
 import { SidebarProvider } from '@/components/page-wrapper';
+import { AppWalkthrough, useAppWalkthrough } from '@/components/app-walkthrough';
 import { ReactNode, useEffect, useState } from 'react';
+
+function WalkthroughWrapper() {
+  const { runTour, completeTour } = useAppWalkthrough();
+  
+  return (
+    <AppWalkthrough
+      runTour={runTour}
+      onComplete={completeTour}
+    />
+  );
+}
 
 export function Providers({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -34,6 +46,7 @@ export function Providers({ children }: { children: ReactNode }) {
             >
               <PWARegistration />
               <InstallPrompt />
+              <WalkthroughWrapper />
               <Toaster />
               {children}
             </ThemeProvider>
