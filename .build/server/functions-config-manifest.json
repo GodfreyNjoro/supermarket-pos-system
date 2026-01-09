@@ -1,0 +1,1 @@
+{"version":1,"functions":{"/api/categories":{},"/api/inventory/history":{},"/api/products/[id]":{},"/api/products/import":{},"/api/products":{},"/api/returns":{},"/api/returns/[id]":{},"/api/sales":{},"/api/sales/[id]":{},"/api/sales/stats":{},"/api/customers/[id]":{},"/api/customers":{}}}

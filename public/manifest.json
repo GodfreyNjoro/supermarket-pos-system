@@ -1,0 +1,36 @@
+{
+  "name": "Supermarket POS System",
+  "short_name": "POS System",
+  "description": "Full-featured Point of Sale system with offline support",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["business", "finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "POS Checkout",
+      "short_name": "Checkout",
+      "description": "Quick access to POS checkout",
+      "url": "/pos",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Products",
+      "short_name": "Products",
+      "description": "Manage products",
+      "url": "/products",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    }
+  ]
+}
