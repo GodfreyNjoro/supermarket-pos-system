@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Supermarket POS System - Comprehensive point-of-sale solution with inventory management, reporting, and multi-store support",
   "author": "SuperPOS Team",
+  "main": "electron/main.js",
   "private": true,
   "scripts": {
     "dev": "next dev",
